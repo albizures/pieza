@@ -1,0 +1,19 @@
+{
+	"name": "basic",
+	"version": "1.0.0",
+	"main": "index.js",
+	"author": "Jose Albizures <jose@albizures.com>",
+	"license": "MIT",
+	"scripts": {
+		"start": "pieza start",
+		"build": "pieza build",
+		"clean": "rm -rf node_modules",
+		"preinstall": "yarn clean"
+	},
+	"devDependencies": {
+		"@pieza/cli": "*"
+	},
+	"dependencies": {
+		"@pieza/core": "*"
+	}
+}
