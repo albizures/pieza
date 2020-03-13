@@ -1,14 +1,11 @@
 import p5 from 'p5';
-import { Size, PiezaData } from './types';
+import { Size, PiezaData, SettingsFactory, Setup, Draw, Update } from './types';
 import { clean, isClient } from './utils';
 import {
 	setCurrentPiezaData,
 	cleanCurrentPiezaData,
 	useContext,
 } from './hooks';
-
-type Setup<S> = () => void | S;
-type SettingsFactory<T> = (context: p5) => T;
 
 type PiezaSize = number | Size;
 const isSettingsFactory = <T>(
@@ -24,8 +21,8 @@ interface PiezaConfig<T, S> {
 	type?: p5.WEBGL | p5.P2D;
 	size?: PiezaSize;
 	setup?: Setup<S>;
-	draw?: () => void;
-	update?: (state: S) => S;
+	draw?: Draw;
+	update?: Update<S>;
 	state?: S;
 	settings?: SettingsFactory<T> | T;
 }
@@ -49,7 +46,7 @@ export interface Pieza {
 }
 
 const piezas = new Map<string, Pieza>();
-const piezasData = new Map<string, PiezaData>();
+const piezasData = new Map<string, PiezaData<any>>();
 
 export type Piezas = typeof piezas;
 export type PiezasData = typeof piezasData;
@@ -91,7 +88,7 @@ const setLocalSetting = (name: string, settingName: string, value: unknown) => {
 	);
 };
 
-const run = (fns: (Function | null | undefined)[], data: PiezaData) => {
+const run = <S>(fns: (Function | null | undefined)[], data: PiezaData<S>) => {
 	setCurrentPiezaData(data);
 	fns.forEach((fn) => {
 		if (!fn) {
@@ -106,7 +103,7 @@ const run = (fns: (Function | null | undefined)[], data: PiezaData) => {
 	cleanCurrentPiezaData();
 };
 
-const runSetup = <S>(setup: Setup<S>, data: PiezaData) => () => {
+const runSetup = <S>(setup: Setup<S>, data: PiezaData<S>) => () => {
 	const state = setup();
 	if (state) {
 		data.state = state;
@@ -119,6 +116,59 @@ const defaultSize: PiezaSize = isClient
 			width: window.innerWidth,
 	  }
 	: 360;
+
+const attachFactory = <T, S>(
+	data: PiezaData<S>,
+	localSettings: object,
+	settings?: SettingsFactory<T> | T,
+) => async (parent: HTMLElement) => {
+	const { sizeAndCenter, type, draw, setup, autoClean, update } = data;
+
+	const { default: p5 } = await import('p5');
+	new p5((sketch: p5) => {
+		data.context = sketch;
+		sketch.setup = () => {
+			sketch.createCanvas(sizeAndCenter.width, sizeAndCenter.height, type);
+			if (!draw) {
+				sketch.noLoop();
+			}
+
+			data.settings = {
+				...(isSettingsFactory(settings) ? settings(sketch) : settings),
+				...localSettings,
+			};
+
+			run([defaultSetup, runSetup(setup, data), draw], data);
+		};
+
+		if (draw) {
+			const updateState = () => {
+				if (typeof update === 'function') {
+					data.state = update(data.state);
+				}
+			};
+			sketch.draw = () => {
+				run([updateState, autoClean ? clean : null, draw], data);
+			};
+		}
+	}, parent);
+};
+
+const updateSettingFactory = <S>(data: PiezaData<S>) => (
+	settingName: string,
+	value: unknown,
+) => {
+	const { setup, draw } = data;
+	// @ts-ignore
+	if (value === data.settings[settingName]) {
+		return;
+	}
+
+	Object.assign(data.settings, { [settingName]: value });
+	setLocalSetting(name, settingName, value);
+
+	run([clean, defaultSetup, runSetup(setup, data), draw], data);
+};
 
 const create = <T extends object = {}, S extends object = {}>(
 	config: PiezaConfig<T, S>,
@@ -161,11 +211,18 @@ const create = <T extends object = {}, S extends object = {}>(
 	}
 
 	let context: p5;
-	const data = {
+	const data: PiezaData<S> = {
 		state: defaultState,
 		name,
+		draw,
+		setup,
+		update,
+		autoClean,
 		get context() {
 			return context;
+		},
+		set context(value) {
+			context = value;
 		},
 		sizeAndCenter: {
 			...size,
@@ -177,58 +234,13 @@ const create = <T extends object = {}, S extends object = {}>(
 
 	piezasData.set(name, data);
 
-	const attach = async (parent: HTMLElement) => {
-		console.log('attaging', parent);
-
-		const { default: p5 } = await import('p5');
-		new p5((sketch: p5) => {
-			context = sketch;
-			context.setup = () => {
-				context.createCanvas(size.width, size.height, type);
-				if (!draw) {
-					context.noLoop();
-				}
-
-				data.settings = {
-					...(isSettingsFactory(settings) ? settings(context) : settings),
-					...localSettings,
-				};
-
-				run([defaultSetup, runSetup(setup, data), draw], data);
-			};
-
-			if (draw) {
-				const updateState = () => {
-					if (typeof update === 'function') {
-						data.state = update(data.state);
-					}
-				};
-				context.draw = () => {
-					run([updateState, autoClean ? clean : null, draw], data);
-				};
-			}
-		}, parent);
-	};
-
-	const updateSetting = (settingName: string, value: unknown) => {
-		// @ts-ignore
-		if (value === data.settings[settingName]) {
-			return;
-		}
-
-		Object.assign(data.settings, { [settingName]: value });
-		setLocalSetting(name, settingName, value);
-
-		run([clean, defaultSetup, runSetup(setup, data), draw], data);
-	};
-
 	const pieza = {
-		attach,
-		updateSetting,
+		attach: attachFactory<T, S>(data, localSettings, settings),
+		updateSetting: updateSettingFactory(data),
 	};
 
 	if (autoAttach && isClient) {
-		attach(document.body);
+		pieza.attach(document.body);
 	}
 
 	piezas.set(name, pieza);
@@ -238,5 +250,4 @@ const create = <T extends object = {}, S extends object = {}>(
 
 const WEBGL = 'webgl';
 
-export { useContext, useSettings, useSize, useState } from './hooks';
 export { run, WEBGL, create, piezas, piezasData };

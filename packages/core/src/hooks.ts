@@ -1,8 +1,8 @@
 import { PiezaData } from './types';
 
-let currentPiezaData: PiezaData;
+let currentPiezaData: PiezaData<any> | null;
 
-const setCurrentPiezaData = (data: PiezaData) => {
+const setCurrentPiezaData = <S>(data: PiezaData<S>) => {
 	currentPiezaData = data;
 };
 
@@ -10,30 +10,28 @@ const cleanCurrentPiezaData = () => {
 	currentPiezaData = null;
 };
 
-const checkCurrentPieza = (name: string) => {
+const checkCurrentPieza = (name: string): PiezaData<any> => {
 	if (!currentPiezaData) {
 		throw new Error(`${name} used outside of a pieza`);
 	}
+
+	return currentPiezaData;
 };
 
 const useSettings = <T>(): T => {
-	checkCurrentPieza('useSettings');
-	return currentPiezaData.settings as T;
+	return checkCurrentPieza('useSettings').settings as T;
 };
 
 const useContext = () => {
-	checkCurrentPieza('useContext');
-	return currentPiezaData.context;
+	return checkCurrentPieza('useContext').context;
 };
 
 const useState = <S>() => {
-	checkCurrentPieza('useState');
-	return currentPiezaData.state as S;
+	return checkCurrentPieza('useState').state as S;
 };
 
 const useSize = () => {
-	checkCurrentPieza('useSize');
-	return currentPiezaData.sizeAndCenter;
+	return checkCurrentPieza('useSize').sizeAndCenter;
 };
 
 export {
