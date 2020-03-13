@@ -1,0 +1,17 @@
+{
+	"compilerOptions": {
+		"rootDir": "./src",
+		"outDir": "dist",
+		"strict": true,
+		"strictNullChecks": true,
+		"declarationDir": "dist",
+		"allowUnreachableCode": true,
+		"allowJs": false,
+		"target": "ESNext",
+		"module": "CommonJS",
+		"esModuleInterop": true,
+		"declaration": true,
+		"composite": true
+	},
+	"include": ["./src/**/*.ts"]
+}

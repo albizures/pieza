@@ -1,0 +1,22 @@
+{
+	"name": "pieza-monorepo",
+	"version": "1.0.0",
+	"private": true,
+	"main": "index.js",
+	"author": "Jose Albizures <albizures3601@gmail.com>",
+	"license": "MIT",
+	"scripts": {
+		"bootstrap": "lerna bootstrap",
+		"clean": "lerna clean && lerna run clean",
+		"watch": "lerna run watch"
+	},
+	"workspaces": {
+		"packages": [
+			"packages/*",
+			"examples/*"
+		]
+	},
+	"dependencies": {
+		"lerna": "^3.20.2"
+	}
+}

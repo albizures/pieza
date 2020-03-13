@@ -1,0 +1,35 @@
+{
+  "name": "@pieza/core",
+  "version": "0.0.1",
+  "main": "dist/index.js",
+  "author": "Jose Albizures <jose@albizures.com>",
+  "scripts": {
+    "clean": "rimraf dist",
+    "prebuild": "yarn clean",
+    "test": "ts-node src/index.ts",
+    "watch": "tsc -w",
+    "build": "tsc"
+  },
+  "dependencies": {
+    "@babel/core": "^7.8.7",
+    "@babel/preset-env": "^7.8.7",
+    "@babel/preset-typescript": "^7.8.3",
+    "@types/glob": "^7.1.1",
+    "@types/node": "^13.9.0",
+    "@types/p5": "^0.9.0",
+    "babel-loader": "^8.0.6",
+    "glob": "^7.1.6",
+    "p5": "^1.0.0",
+    "pkg-dir": "^4.2.0",
+    "rimraf": "^3.0.2",
+    "typescript": "^3.8.3",
+    "webpack": "^4.42.0",
+    "webpack-cli": "^3.3.11"
+  },
+  "files": [
+    "dist"
+  ],
+  "devDependencies": {
+    "ts-node": "^8.6.2"
+  }
+}
