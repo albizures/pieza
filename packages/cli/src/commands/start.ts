@@ -7,6 +7,7 @@ import {
 	createCompiler,
 	createDevServer,
 	getMainFolder,
+	getRoutes,
 } from '../utils';
 
 export default class Start extends Command {
@@ -39,7 +40,8 @@ export default class Start extends Command {
 			plugins,
 		});
 
-		const server = createDevServer(compiler);
+		const routes = getRoutes(files);
+		const server = createDevServer(compiler, routes);
 
 		const port = await getPort({ port: defaultPort });
 		const host = flags.host || 'localhost';

@@ -1,7 +1,8 @@
 import glob from 'glob';
-import fs from 'fs';
+import fs, { truncate } from 'fs';
 import path from 'path';
-import Server from 'webpack-dev-server';
+import Server, { Configuration as ServerConfig } from 'webpack-dev-server';
+import { Rewrite } from 'connect-history-api-fallback';
 // @ts-ignore
 import createLogger from 'webpack-dev-server/lib/utils/createLogger';
 import webpack, { Configuration, Compiler } from 'webpack';
@@ -48,6 +49,7 @@ const getPlugins = async (files: string[]): Promise<HtmlWebpackPlugin[]> => {
 
 		return new HtmlWebpackPlugin({
 			chunks: [name],
+			xhtml: true,
 			title: getPiezaName(file) || name,
 			filename: `${name}.html`,
 			template: path.join(__dirname, 'template.html'),
@@ -60,20 +62,36 @@ const createCompiler = (customConfig: Configuration) => {
 	return webpack(options);
 };
 
-const createDevServer = (compiler: Compiler) => {
+const createDevServer = (compiler: Compiler, rewrites: Rewrite[]) => {
 	const log = createLogger({
 		logLevel: 'silent',
 	});
+	const config: ServerConfig = {
+		historyApiFallback: {
+			rewrites: rewrites,
+		},
+	};
 	// @ts-ignore
-	return new Server(compiler, {}, log);
+	return new Server(compiler, config, log);
 };
 
 const getMainFolder = () => {
 	return path.join(appDirectory, 'src/piezas');
 };
 
+const getRoutes = (filenames: string[]): Rewrite[] => {
+	return filenames.map((filename) => {
+		const { name } = path.parse(filename);
+		return {
+			from: new RegExp(`/${name}`),
+			to: `/${name}.html`,
+		};
+	});
+};
+
 export {
 	getFiles,
+	getRoutes,
 	getEntries,
 	getPlugins,
 	createCompiler,

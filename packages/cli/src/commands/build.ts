@@ -20,6 +20,7 @@ export default class Start extends Command {
 	static args = [];
 
 	async run() {
+		process.env.NODE_ENV = 'production';
 		const files = await getFiles(getMainFolder());
 		const entry = await getEntries(files);
 		const plugins = await getPlugins(files);
