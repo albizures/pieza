@@ -1,5 +1,5 @@
-import { Vector } from './types';
-import { useContext } from './hooks';
+import { Vector } from '../types';
+import { useContext } from '../hooks';
 
 const drawPoint = (point: Vector) => {
 	const context = useContext();
