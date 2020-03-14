@@ -50,6 +50,7 @@ const getPlugins = async (files: string[]): Promise<HtmlWebpackPlugin[]> => {
 			chunks: [name],
 			title: getPiezaName(file) || name,
 			filename: `${name}.html`,
+			template: path.join(__dirname, 'template.html'),
 		});
 	});
 };
