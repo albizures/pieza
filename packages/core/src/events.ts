@@ -5,7 +5,6 @@ import {
 	PiezaData,
 	P5EventHandlers,
 	P5EventsNames,
-	PiezaConfig,
 } from './types';
 
 const wrapEventHandler = <S>(fn: P5EventHandler, data: PiezaData<S>) => {
@@ -41,7 +40,7 @@ const eachName = (fn: (name: P5EventsNames) => void) => {
 const setEventHandlers = (
 	handlers: P5EventHandlers,
 	context: p5,
-) => {	
+) => {
 	eachName((name) => {
 		const handler = handlers[name];
 

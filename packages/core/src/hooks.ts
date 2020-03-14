@@ -1,5 +1,5 @@
 import { PiezaData } from './types';
-import { createRecorder } from './utils';
+import { createRecorder } from './utils/recorder';
 
 let currentPiezaData: PiezaData<any> | null;
 
