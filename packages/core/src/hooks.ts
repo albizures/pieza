@@ -11,7 +11,7 @@ const cleanCurrentPiezaData = () => {
 	currentPiezaData = null;
 };
 
-const checkCurrentPieza = (name: string): PiezaData<any> => {
+const checkCurrentPieza = <S>(name: string): PiezaData<S> => {
 	if (!currentPiezaData) {
 		throw new Error(`${name} used outside of a pieza`);
 	}
@@ -25,6 +25,19 @@ const useSettings = <T>(): T => {
 
 const useContext = () => {
 	return checkCurrentPieza('useContext').context;
+};
+
+type MutableState<S> = [S, (state: S) => void];
+
+const useMutableState = <S>(): MutableState<S> => {
+	const data = checkCurrentPieza('useState');
+
+	return [
+		data.state as S,
+		(state: S) => {
+			data.state = Object.assign(data.state, state);
+		},
+	];
 };
 
 const useState = <S>() => {
@@ -58,4 +71,5 @@ export {
 	useSettings,
 	setCurrentPiezaData,
 	cleanCurrentPiezaData,
+	useMutableState,
 };

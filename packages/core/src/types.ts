@@ -7,7 +7,7 @@ export interface Size {
 	height: number;
 }
 
-export type Setup<S> = () => void | S;
+export type Setup<S> = () => S;
 export type SettingsFactory<T> = (context: p5) => T;
 export type Draw = () => void;
 export type Update<S> = (state: S) => S;
@@ -66,7 +66,7 @@ export interface PiezaConfig<T, S> extends P5EventHandlers {
 	autoClean?: boolean;
 	type?: p5.WEBGL | p5.P2D;
 	size?: PiezaSize;
-	setup?: Setup<S>;
+	setup: Setup<S>;
 	draw?: Draw;
 	update?: Update<S>;
 	state?: S;

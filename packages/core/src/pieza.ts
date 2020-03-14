@@ -11,15 +11,11 @@ import { getLocalSettings, setLocalSetting } from './localSettings';
 import { run } from './utils/hooks';
 import { wrapEventHandlers, setEventHandlers } from './events';
 
-
 const isSettingsFactory = <T>(
 	factory: SettingsFactory<T> | T,
 ): factory is SettingsFactory<T> => {
 	return typeof factory === 'function';
 };
-
-
-const noop = () => undefined;
 
 const parseSize = (size: PiezaSize): Size => {
 	if (typeof size === 'number') {
@@ -114,11 +110,11 @@ const updateSettingFactory = <S>(data: PiezaData<S>) => (
 	run([clean, defaultSetup, runSetup(setup, data), draw], data);
 };
 
-const create = <T extends object = {}, S extends object = {}>(
+const create = <T extends object = {}, S = void>(
 	config: PiezaConfig<T, S>,
 ) => {
 	const {
-		setup = noop,
+		setup,
 		type,
 		autoClean = false,
 		autoAttach = true,
