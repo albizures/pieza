@@ -1,4 +1,5 @@
 import { PiezaData } from './types';
+import { createRecorder } from './utils';
 
 let currentPiezaData: PiezaData<any> | null;
 
@@ -34,11 +35,27 @@ const useSize = () => {
 	return checkCurrentPieza('useSize').sizeAndCenter;
 };
 
+const useRecorder = () => {
+	const data = checkCurrentPieza('useRecorder');
+
+	if (data.recorder) {
+		return data.recorder;
+	}
+
+	// @ts-ignore
+	const canvas = data.context.canvas;
+
+	data.recorder = createRecorder(canvas, data.name);
+
+	return data.recorder;
+};
+
 export {
-	useSettings,
 	useSize,
 	useState,
 	useContext,
+	useRecorder,
+	useSettings,
 	setCurrentPiezaData,
 	cleanCurrentPiezaData,
 };

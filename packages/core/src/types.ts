@@ -12,8 +12,18 @@ export type SettingsFactory<T> = (context: p5) => T;
 export type Draw = () => void;
 export type Update<S> = (state: S) => S;
 
+export interface Recorder {
+	mediaRecorder: MediaRecorder;
+	recordedBlobs: Blob[];
+	start: () => void;
+	resume: () => void;
+	pause: () => void;
+	save: (name?: string) => void;
+}
+
 export interface PiezaData<S = unknown> {
 	context: p5;
+	recorder?: Recorder;
 	sizeAndCenter: Size & { centerX: number; centerY: number };
 	name: string;
 	draw?: Draw;
