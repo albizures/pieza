@@ -1,9 +1,13 @@
-import { create, useContext, useRecorder } from '@pieza/core';
+import { create, useContext, useRecorder, useState } from '@pieza/core';
 
-let value = 1;
-let change = 1;
+type Change = 1 | -1;
 
-export default create({
+interface State {
+	value: number;
+	change: Change;
+}
+
+export default create<null, State>({
 	name: 'Recording example',
 	autoClean: true,
 	setup() {
@@ -16,18 +20,30 @@ export default create({
 		context.mouseClicked = () => {
 			recorder.save();
 		};
-	},
-	draw() {
-		const context = useContext();
-		context.background('black');
-		context.circle(value, value, value);
 
+		return {
+			value: 1,
+			change: 1,
+		};
+	},
+	update(state: State) {
+		const { value } = state;
+		let change: Change = -1;
 		if (value > 300) {
 			change = -1;
 		} else if (value < 0) {
 			change = 1;
 		}
 
-		value = value + change;
+		return {
+			value: value + change,
+			change,
+		};
+	},
+	draw() {
+		const context = useContext();
+		const { value } = useState<State>();
+		context.background('black');
+		context.circle(value, value, value);
 	},
 });

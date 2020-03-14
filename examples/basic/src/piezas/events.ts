@@ -1,13 +1,19 @@
 import { create, useContext } from '@pieza/core';
 
+let x = 0;
+let y = 0;
+
 export default create({
 	name: 'My title',
-	setup() {
+	autoClean: true,
+	setup() {},
+	draw() {
 		const context = useContext();
-		context.circle(10, 10, 50);
+		context.circle(x, y, 40);
 	},
-	windowResized() {
+	mouseMoved() {
 		const context = useContext();
-		console.log(context.windowHeight, context.windowWidth);
+		x = context.mouseX;
+		y = context.mouseY;
 	},
 });
