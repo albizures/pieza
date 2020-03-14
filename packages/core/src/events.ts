@@ -1,4 +1,5 @@
 import type p5 from 'p5';
+import { useContext } from './hooks';
 import { singleRun } from './utils/hooks';
 import {
 	P5EventHandler,
@@ -6,6 +7,11 @@ import {
 	P5EventHandlers,
 	P5EventsNames,
 } from './types';
+
+function windowResized() {
+	const context = useContext();
+  context.resizeCanvas(context.windowWidth, context.windowHeight);
+}
 
 const wrapEventHandler = <S>(fn: P5EventHandler, data: PiezaData<S>) => {
 	const handler: P5EventHandler = () => {
@@ -24,6 +30,8 @@ const wrapEventHandlers = <T, S>(
 
 		if (handler) {
 			handlers[name] = wrapEventHandler(handler, data);
+		}else if (name ===P5EventsNames.windowResized) {
+			handlers.windowResized = wrapEventHandler(windowResized, data);
 		}
 	});
 };
