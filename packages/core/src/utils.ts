@@ -11,6 +11,12 @@ const drawLine = (start: Vector, end: Vector) => {
 	context.line(start.x, start.y, start.z, end.x, end.y, end.z);
 };
 
+const defaultSetup = () => {
+	const context = useContext();
+
+	context.strokeWeight(2);
+};
+
 const clean = () => {
 	const context = useContext();
 
@@ -87,7 +93,7 @@ const createRecorder = (
 	const save = (name = defaultName) => {
 		mediaRecorder.stop();
 		const blob = new Blob(recordedBlobs, { type: mimeType });
-		const url = window.URL.createObjectURL(blob);
+		const url = URL.createObjectURL(blob);
 		const a = document.createElement('a');
 		a.style.display = 'none';
 		a.href = url;
@@ -96,7 +102,7 @@ const createRecorder = (
 		a.click();
 		setTimeout(() => {
 			document.body.removeChild(a);
-			window.URL.revokeObjectURL(url);
+			URL.revokeObjectURL(url);
 		}, 300);
 	};
 
@@ -110,4 +116,12 @@ const createRecorder = (
 	};
 };
 
-export { drawPoint, drawLine, clean, background, isClient, createRecorder };
+export {
+	drawPoint,
+	drawLine,
+	clean,
+	background,
+	isClient,
+	createRecorder,
+	defaultSetup,
+};

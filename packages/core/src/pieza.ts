@@ -1,31 +1,23 @@
-import p5 from 'p5';
-import { Size, PiezaData, SettingsFactory, Setup, Draw, Update } from './types';
-import { clean, isClient } from './utils';
+import type p5 from 'p5';
 import {
-	setCurrentPiezaData,
-	cleanCurrentPiezaData,
-	useContext,
-} from './hooks';
+	Size,
+	PiezaData,
+	SettingsFactory,
+	Setup,
+	PiezaSize, PiezaConfig,
+} from './types';
+import { clean, isClient, defaultSetup } from './utils';
+import { getLocalSettings, setLocalSetting } from './localSettings';
+import { run } from './utils/hooks';
+import { wrapEventHandlers, setEventHandlers } from './events';
 
-type PiezaSize = number | Size;
+
 const isSettingsFactory = <T>(
 	factory: SettingsFactory<T> | T,
 ): factory is SettingsFactory<T> => {
 	return typeof factory === 'function';
 };
 
-interface PiezaConfig<T, S> {
-	name: string;
-	autoAttach?: boolean;
-	autoClean?: boolean;
-	type?: p5.WEBGL | p5.P2D;
-	size?: PiezaSize;
-	setup?: Setup<S>;
-	draw?: Draw;
-	update?: Update<S>;
-	state?: S;
-	settings?: SettingsFactory<T> | T;
-}
 
 const noop = () => undefined;
 
@@ -51,58 +43,6 @@ const piezasData = new Map<string, PiezaData<any>>();
 export type Piezas = typeof piezas;
 export type PiezasData = typeof piezasData;
 
-const defaultSetup = () => {
-	const context = useContext();
-
-	context.strokeWeight(2);
-};
-
-const getLocalSettings = <T extends object>(name: string) => {
-	if (!isClient) {
-		return {};
-	}
-
-	const rawSetting = localStorage.getItem(`${name}-pieza-settings`);
-
-	if (rawSetting) {
-		try {
-			return JSON.parse(rawSetting) as T;
-		} catch (error) {
-			return {};
-		}
-	}
-	return {};
-};
-
-const setLocalSetting = (name: string, settingName: string, value: unknown) => {
-	const localSettings = getLocalSettings(name);
-	if (!isClient) {
-		return;
-	}
-	localStorage.setItem(
-		`${name}-pieza-settings`,
-		JSON.stringify({
-			...localSettings,
-			[settingName]: value,
-		}),
-	);
-};
-
-const run = <S>(fns: (Function | null | undefined)[], data: PiezaData<S>) => {
-	setCurrentPiezaData(data);
-	fns.forEach((fn) => {
-		if (!fn) {
-			return;
-		}
-		try {
-			fn();
-		} catch (error) {
-			console.error(error);
-		}
-	});
-	cleanCurrentPiezaData();
-};
-
 const runSetup = <S>(setup: Setup<S>, data: PiezaData<S>) => () => {
 	const state = setup();
 	if (state) {
@@ -118,6 +58,7 @@ const defaultSize: PiezaSize = isClient
 	: 360;
 
 const attachFactory = <T, S>(
+	config: PiezaConfig<T, S>,
 	data: PiezaData<S>,
 	localSettings: object,
 	settings?: SettingsFactory<T> | T,
@@ -127,6 +68,9 @@ const attachFactory = <T, S>(
 	const { default: p5 } = await import('p5');
 	new p5((sketch: p5) => {
 		data.context = sketch;
+
+		setEventHandlers(config, sketch);
+
 		sketch.setup = () => {
 			sketch.createCanvas(sizeAndCenter.width, sizeAndCenter.height, type);
 			if (!draw) {
@@ -188,8 +132,8 @@ const create = <T extends object = {}, S extends object = {}>(
 
 	if (!isClient) {
 		return {
-			attach: () => console.log('not available in the server'),
-			updateSetting: () => console.log('not available in the server'),
+			attach: () => console.warn('not available in the server'),
+			updateSetting: () => console.warn('not available in the server'),
 			name,
 		};
 	}
@@ -213,6 +157,7 @@ const create = <T extends object = {}, S extends object = {}>(
 	let context: p5;
 	const data: PiezaData<S> = {
 		state: defaultState,
+		type,
 		name,
 		draw,
 		setup,
@@ -232,10 +177,12 @@ const create = <T extends object = {}, S extends object = {}>(
 		settings: {},
 	};
 
+	wrapEventHandlers(config, data);
+
 	piezasData.set(name, data);
 
 	const pieza = {
-		attach: attachFactory<T, S>(data, localSettings, settings),
+		attach: attachFactory<T, S>(config, data, localSettings, settings),
 		updateSetting: updateSettingFactory(data),
 	};
 

@@ -32,8 +32,7 @@ export default class Start extends Command {
 
 		compiler.run((error, stats) => {
 			if (error || stats.hasErrors()) {
-				console.log(error || stats.toString());
-				console.log('error');
+				console.error(error || stats.toString());
 			} else {
 				console.log('done');
 			}
