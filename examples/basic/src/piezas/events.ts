@@ -1,3 +1,4 @@
+// @pieza-name: My title
 import { create, useContext } from '@pieza/core';
 
 let x = 0;

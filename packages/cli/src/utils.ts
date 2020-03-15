@@ -1,5 +1,5 @@
 import glob from 'glob';
-import fs, { truncate } from 'fs';
+import fs from 'fs';
 import path from 'path';
 import Server, { Configuration as ServerConfig } from 'webpack-dev-server';
 import { Rewrite } from 'connect-history-api-fallback';
@@ -34,10 +34,15 @@ const getEntries = async (files: string[]): Promise<Record<string, string>> => {
 
 const getPiezaName = (file: string) => {
 	try {
-		return require(file).default.name;
+		const line = fs
+			.readFileSync(file, 'utf8')
+			.split('\n')
+			.find((line) => line.includes('// @pieza-name: '));
+		if (line) {
+			return line.replace('// @pieza-name: ', '');
+		}
 	} catch (error) {
-		const relativeFile = file.replace(appDirectory, '.');
-		throw new Error(`${relativeFile} invalid export`);
+		return error;
 	}
 
 	return undefined;
