@@ -2,6 +2,8 @@ import type p5 from 'p5';
 
 export type { Vector } from 'p5';
 
+export type Context = p5;
+
 export interface Size {
 	width: number;
 	height: number;
@@ -44,7 +46,11 @@ export interface Recorder {
 	save: (name?: string) => void;
 }
 
-export interface PiezaData<S = unknown> extends P5EventHandlers {
+export type SettingsDescription<T> = {
+	[K in keyof T]: DescribedSetting<T[K]>
+};
+
+export interface PiezaData<S = unknown, T = unknown> extends P5EventHandlers {
 	context: p5;
 	recorder?: Recorder;
 	sizeAndCenter: Size & { centerX: number; centerY: number };
@@ -54,13 +60,50 @@ export interface PiezaData<S = unknown> extends P5EventHandlers {
 	setup: Setup<S>;
 	update?: Update<S>;
 	state: S;
+	settingsDescription: SettingsDescription<T>
 	autoClean: boolean;
-	settings?: unknown;
+	settings?: T;
 }
+
+export enum PrimitiveTypeSetting {
+	Number = 'number',
+	String = 'string',
+	Boolean = 'boolean',
+}
+
+export const describedSetting = Symbol('describedSetting')
+
+export type PrimitiveSetting = number | string | boolean;
+export interface DescribedSetting<S> {
+	type: PrimitiveTypeSetting;
+	value: S;
+	label: string;
+	[describedSetting]: true,
+}
+
+
+export interface NumberSetting extends DescribedSetting<number> {
+	slide: boolean;
+	min: number;
+	max: number;
+}
+
+export interface StringSetting extends DescribedSetting<string> {}
+export interface BooleanSetting extends DescribedSetting<boolean> {}
+
+export type Setting = NumberSetting | StringSetting | BooleanSetting | PrimitiveSetting
+
+export type Settings = Record<string, PrimitiveSetting>;
 
 export type PiezaSize = number | Size;
 
-export interface PiezaConfig<T, S> extends P5EventHandlers {
+export type ConfigSettingsValue<S> = {
+	[T in keyof S]: DescribedSetting<S[T]> | S[T]
+}
+
+export type ConfigSettings<T> = SettingsFactory<ConfigSettingsValue<T>> | ConfigSettingsValue<T>;
+
+export interface PiezaConfig<T extends Settings, S> extends P5EventHandlers {
 	name: string;
 	autoAttach?: boolean;
 	autoClean?: boolean;
@@ -70,6 +113,5 @@ export interface PiezaConfig<T, S> extends P5EventHandlers {
 	draw?: Draw;
 	update?: Update<S>;
 	state?: S;
-	settings?: SettingsFactory<T> | T;
+	settings?: ConfigSettings<T>,
 }
-

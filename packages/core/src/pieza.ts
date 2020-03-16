@@ -1,21 +1,19 @@
-import type p5 from 'p5';
 import {
 	Size,
+	Context,
 	PiezaData,
 	SettingsFactory,
 	Setup,
-	PiezaSize, PiezaConfig,
+	PiezaSize,
+	PiezaConfig,
+	Settings,
+	ConfigSettingsValue,
 } from './types';
+import { parseSettings } from './settings';
 import { clean, isClient, defaultSetup } from './utils';
 import { getLocalSettings, setLocalSetting } from './localSettings';
 import { run } from './utils/hooks';
 import { wrapEventHandlers, setEventHandlers } from './events';
-
-const isSettingsFactory = <T>(
-	factory: SettingsFactory<T> | T,
-): factory is SettingsFactory<T> => {
-	return typeof factory === 'function';
-};
 
 const parseSize = (size: PiezaSize): Size => {
 	if (typeof size === 'number') {
@@ -53,16 +51,16 @@ const defaultSize: PiezaSize = isClient
 	  }
 	: 360;
 
-const attachFactory = <T, S>(
+const attachFactory = <T extends Settings, S>(
 	config: PiezaConfig<T, S>,
 	data: PiezaData<S>,
 	localSettings: object,
-	settings?: SettingsFactory<T> | T,
+	settings?: SettingsFactory<ConfigSettingsValue<T>> | ConfigSettingsValue<T>,
 ) => async (parent: HTMLElement) => {
 	const { sizeAndCenter, type, draw, setup, autoClean, update } = data;
 
 	const { default: p5 } = await import('p5');
-	new p5((sketch: p5) => {
+	new p5((sketch: Context) => {
 		data.context = sketch;
 
 		setEventHandlers(config, sketch);
@@ -73,10 +71,15 @@ const attachFactory = <T, S>(
 				sketch.noLoop();
 			}
 
-			data.settings = {
-				...(isSettingsFactory(settings) ? settings(sketch) : settings),
-				...localSettings,
-			};
+			if (settings) {
+				const { values, description } = parseSettings(settings, sketch);
+
+				data.settingsDescription = description;
+				data.settings = {
+					...values,
+					...localSettings,
+				};
+			}
 
 			run([defaultSetup, runSetup(setup, data), draw], data);
 		};
@@ -110,7 +113,7 @@ const updateSettingFactory = <S>(data: PiezaData<S>) => (
 	run([clean, defaultSetup, runSetup(setup, data), draw], data);
 };
 
-const create = <T extends object = {}, S = void>(
+const create = <T extends Settings = {}, S = void>(
 	config: PiezaConfig<T, S>,
 ) => {
 	const {
@@ -150,7 +153,7 @@ const create = <T extends object = {}, S = void>(
 		);
 	}
 
-	let context: p5;
+	let context: Context;
 	const data: PiezaData<S> = {
 		state: defaultState,
 		type,
@@ -158,6 +161,7 @@ const create = <T extends object = {}, S = void>(
 		draw,
 		setup,
 		update,
+		settingsDescription: {},
 		autoClean,
 		get context() {
 			return context;
