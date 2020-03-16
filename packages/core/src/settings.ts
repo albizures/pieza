@@ -91,12 +91,14 @@ const NumberSetting = ({
 	min = -Infinity,
 	max = Infinity,
 	slide = false,
+	step,
 }: NumberSettingOptions): NumberSetting => ({
 	label,
 	value,
 	min,
 	max,
 	slide,
+	step,
 	type: PrimitiveTypeSetting.Number,
 	[describedSetting]: true,
 });

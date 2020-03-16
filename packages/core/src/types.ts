@@ -86,6 +86,7 @@ export interface NumberSetting extends DescribedSetting<number> {
 	slide: boolean;
 	min: number;
 	max: number;
+	step?: number;
 }
 
 export interface StringSetting extends DescribedSetting<string> {}

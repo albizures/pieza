@@ -13,6 +13,7 @@ import { parseSettings } from './settings';
 import { clean, isClient, defaultSetup } from './utils';
 import { getLocalSettings, setLocalSetting } from './localSettings';
 import { run } from './utils/hooks';
+import { createSettingsPanel } from './settingsPanel';
 import { wrapEventHandlers, setEventHandlers } from './events';
 
 const parseSize = (size: PiezaSize): Size => {
@@ -80,6 +81,8 @@ const attachFactory = <T extends Settings, S>(
 					...localSettings,
 				};
 			}
+
+			createSettingsPanel(data);
 
 			run([defaultSetup, runSetup(setup, data), draw], data);
 		};
