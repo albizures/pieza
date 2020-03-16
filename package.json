@@ -3,7 +3,7 @@
 	"version": "1.0.0",
 	"private": true,
 	"main": "index.js",
-	"author": "Jose Albizures <albizures3601@gmail.com>",
+	"author": "Jose Albizures <jose@albizures.com>",
 	"license": "MIT",
 	"scripts": {
 		"bootstrap": "lerna bootstrap",
@@ -17,6 +17,7 @@
 		]
 	},
 	"dependencies": {
-		"lerna": "^3.20.2"
+		"lerna": "^3.20.2",
+		"prettier": "^1.19.1"
 	}
 }

@@ -1,3 +1,4 @@
+// @pieza-name: Using state
 import { create, useContext, useMutableState, useState } from '@pieza/core';
 
 interface State {
@@ -6,7 +7,7 @@ interface State {
 }
 
 export default create<null, State>({
-	name: 'My title',
+	name: 'Using state',
 	autoClean: true,
 	setup() {
 		return {
