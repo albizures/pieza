@@ -29,25 +29,6 @@ const background = (color: string) => {
 	context.background(color);
 };
 
-const debounce = (fn: Function, wait: number) => {
-	let timer: number;
-	return (...args: any[]) => {
-		clearTimeout(timer);
-
-		timer = window.setTimeout(() => {
-			fn(...args);
-		}, wait);
-	};
-};
-
 const isClient = typeof window === 'object';
 
-export {
-	drawPoint,
-	drawLine,
-	clean,
-	background,
-	isClient,
-	defaultSetup,
-	debounce,
-};
+export { drawPoint, drawLine, clean, background, isClient, defaultSetup };

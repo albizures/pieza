@@ -1,19 +1,39 @@
 import { css, glob } from 'goober';
+import debounce from 'lodash.debounce';
 import {
 	PiezaData,
 	PrimitiveTypeSetting,
 	DescribedSetting,
 	NumberSetting,
 } from './types';
-import { debounce } from './utils';
+
+const defaultSize = 300;
 
 const styles = {
 	container: css`
 		position: fixed;
-		right: 0;
+		left: 100%;
 		top: 0;
 		height: 100%;
-		border: 1px solid rgb(223, 226, 229);
+		border-left: 1px solid rgb(223, 226, 229);
+		background: white;
+		transition: left 0.2s;
+	`,
+	floatTab: css`
+		position: absolute;
+		right: calc(100% - 1px);
+		padding: 0.375rem 0.45rem;
+		border-left: 1px solid rgb(223, 226, 229);
+		border-bottom: 1px solid rgb(223, 226, 229);
+	`,
+	floatTabBottom: css`
+		display: block;
+		line-height: 1;
+		padding: 0;
+		font-size: 30px;
+		background: white;
+		border-radius: 50%;
+		border: 0;
 	`,
 	resizeBar: css`
 		position: absolute;
@@ -56,10 +76,10 @@ const isNumberSetting = (
 	return setting.type === PrimitiveTypeSetting.Number;
 };
 
-const removeSpaces = (str: string) => str.replace(' ', '-').trim();
+const removeSpaces = (str: string) => str.trim().replace(/[\s\?.]/g, '-');
 
 const createId = (name: string, label: string) => {
-	return `${removeSpaces(name)}-${removeSpaces(label)}`;
+	return removeSpaces(`${name}-${label}`);
 };
 
 const createSetting = <S, T>(
@@ -133,11 +153,85 @@ const createSetting = <S, T>(
 const createResizeBar = <S, T>(data: PiezaData<S, T>) => {
 	const { context } = data;
 	const resizeBar = context.createDiv().class(styles.resizeBar);
+	const element = resizeBar.elt as HTMLDivElement;
+	let lastSize: number;
+
+	const onResize = (event: MouseEvent) => {
+		const panel = element.parentElement;
+		if (!panel) {
+			return;
+		}
+
+		const size = window.innerWidth - event.x;
+
+		panel.style.left = `calc(100% - ${size}px)`;
+		panel.style.width = `${size}px`;
+		lastSize = size;
+	};
+
+	const onStartResize = () => {
+		const panel = element.parentElement;
+		if (!panel) {
+			return;
+		}
+
+		panel.style.transition = 'none';
+		window.addEventListener('mouseup', onEndResize);
+		window.addEventListener('mousemove', onResize);
+	};
+
+	const onEndResize = () => {
+		const panel = element.parentElement;
+		if (!panel) {
+			return;
+		}
+
+		panel.style.transition = '';
+		window.removeEventListener('mousemove', onResize);
+		window.removeEventListener('mouseup', onEndResize);
+		if (lastSize) {
+			saveSize(lastSize);
+		}
+	};
+
+	element.addEventListener('mousedown', onStartResize);
 
 	return resizeBar;
 };
 
 type UpdateSetting = (settingName: string, value: unknown) => void;
+
+const saveSize = (value: number) => {
+	localStorage.setItem('settings-panel-size', String(value));
+};
+
+const getSize = () => {
+	const value = localStorage.getItem('settings-panel-size');
+	const localSize = value === null ? NaN : Number(value);
+
+	return Number.isNaN(localSize) ? defaultSize : localSize;
+};
+
+const createFloatTab = <S, T>(
+	data: PiezaData<S, T>,
+	onClick: EventHandlerNonNull,
+) => {
+	const { context } = data;
+	const label = context
+		.createElement('button', '⚙️')
+		.addClass(styles.floatTabBottom);
+
+	const tab = context
+		.createDiv()
+		.child(label)
+		.addClass(styles.floatTab);
+
+	const element = tab.elt as HTMLDivElement;
+
+	element.addEventListener('click', onClick);
+
+	return tab;
+};
 
 const createSettingsPanel = <S, T>(
 	data: PiezaData<S, T>,
@@ -150,11 +244,27 @@ const createSettingsPanel = <S, T>(
 		}
 	`;
 	const { context, settingsDescription } = data;
+	const container = context.createDiv();
+	let isOpen = false;
 
-	const container = context
-		.createDiv()
+	const size = getSize();
+
+	const floatTab = createFloatTab(data, () => {
+		const size = getSize();
+		if (isOpen) {
+			isOpen = false;
+			container.style('left', `100%`);
+		} else {
+			container.style('left', `calc(100% - ${size}px)`);
+			isOpen = true;
+		}
+	});
+
+	container
 		.child(createResizeBar(data))
-		.addClass(styles.container);
+		.child(floatTab)
+		.addClass(styles.container)
+		.style('width', `${size}px`);
 
 	const onChange = debounce((name: string, value: unknown) => {
 		updateSetting(name, value);

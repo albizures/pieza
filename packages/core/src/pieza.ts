@@ -14,7 +14,6 @@ import { parseSettings } from './settings';
 import { clean, isClient, defaultSetup } from './utils';
 import { getLocalSettings, setLocalSetting } from './localSettings';
 import { run } from './utils/hooks';
-import { createSettingsPanel } from './settingsPanel';
 import { wrapEventHandlers, setEventHandlers } from './events';
 
 const parseSize = (size: PiezaSize): Size => {
@@ -135,8 +134,6 @@ const updateSettingFactory = <S, T extends Settings>(data: PiezaData<S, T>) => (
 		return;
 	}
 
-	console.log(settingName, value);
-
 	if (!(settingName in data.settings)) {
 		return;
 	}
@@ -214,11 +211,15 @@ const create = <T extends Settings = {}, S = void>(
 
 		addSettings(data, context, settings);
 
-		createSettingsPanel(data, updateSetting);
-
 		addSetup(data, context);
 
 		addDraw(data, context);
+
+		if (data.settings && Object.keys(data.settings).length > 0) {
+			import('./settingsPanel').then(({ createSettingsPanel }) => {
+				createSettingsPanel(data, updateSetting);
+			});
+		}
 	};
 
 	const pieza = {

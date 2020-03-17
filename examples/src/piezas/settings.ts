@@ -21,7 +21,6 @@ export default create<Settings>({
 	setup() {
 		const { value, size, isDoubleSize, text } = useSettings<Settings>();
 		const context = useContext();
-
 		context.circle(value, value, isDoubleSize ? size * 2 : size);
 		context.textSize(30);
 		context.text(text, 50, 50);

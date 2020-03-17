@@ -6,32 +6,22 @@
 	"scripts": {
 		"clean": "rimraf dist",
 		"prebuild": "yarn clean",
-		"test": "ts-node src/index.ts",
 		"watch": "tsc -w",
 		"build": "tsc"
 	},
 	"dependencies": {
-		"@babel/core": "^7.8.7",
-		"@babel/preset-env": "^7.8.7",
-		"@babel/preset-typescript": "^7.8.3",
 		"@types/dom-mediacapture-record": "^1.0.3",
 		"@types/glob": "^7.1.1",
+		"@types/lodash.debounce": "^4.0.6",
 		"@types/p5": "^0.9.0",
-		"babel-loader": "^8.0.6",
-		"glob": "^7.1.6",
 		"goober": "^1.7.1",
+		"lodash.debounce": "^4.0.8",
 		"p5": "^1.0.0",
-		"pkg-dir": "^4.2.0",
-		"rimraf": "^3.0.2",
 		"typescript": "^3.8.3",
-		"utility-types": "^3.10.0",
-		"webpack": "^4.42.0",
-		"webpack-cli": "^3.3.11"
+		"utility-types": "^3.10.0"
 	},
 	"files": [
 		"dist"
 	],
-	"devDependencies": {
-		"ts-node": "^8.6.2"
-	}
+	"devDependencies": {}
 }
