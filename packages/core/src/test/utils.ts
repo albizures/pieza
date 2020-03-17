@@ -1,4 +1,4 @@
-import { PiezaData, Context, ConfigSettingsValue } from '../src/types';
+import { PiezaData, Context, ConfigSettingsValue } from '../types';
 
 const createData = (data = {}): PiezaData => {
 	//@ts-ignore

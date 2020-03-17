@@ -9,7 +9,8 @@
 		"test": "jest",
 		"bootstrap": "lerna bootstrap",
 		"clean": "lerna clean && lerna run clean",
-		"watch": "lerna run watch"
+		"watch": "lerna run watch",
+		"build": "lerna run build"
 	},
 	"workspaces": {
 		"packages": [

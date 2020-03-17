@@ -4,9 +4,10 @@
 	"main": "dist/index.js",
 	"author": "Jose Albizures <jose@albizures.com>",
 	"scripts": {
-		"clean": "rimraf dist",
+		"clean": "rimraf dist && rimraf *.tsbuildinfo",
+		"prewatch": "yarn clean",
+		"watch": "tsc -w -p tsconfig.build.json ",
 		"prebuild": "yarn clean",
-		"watch": "tsc -w -p tsconfig.build.json",
 		"build": "tsc -p tsconfig.build.json"
 	},
 	"dependencies": {

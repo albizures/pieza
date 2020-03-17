@@ -1,7 +1,7 @@
 import p5 from 'p5';
 import { drawPoint, drawLine, clear, background, defaultSetup } from '../index';
 import { singleRun } from '../hooks';
-import { createData } from '../../../test/utils';
+import { createData } from '../../test/utils';
 
 test('drawPoint', () => {
 	const data = createData({

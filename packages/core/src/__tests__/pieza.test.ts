@@ -1,5 +1,5 @@
 import { addDraw, addSettings, addSetup } from '../pieza';
-import { createData, createContext, createSettings } from '../../test/utils';
+import { createData, createContext, createSettings } from '../test/utils';
 import { setCurrentData } from '../utils/hooks';
 
 test('addSetup', () => {

@@ -6,7 +6,7 @@ import {
 	getSettings,
 } from '../settings';
 import { PrimitiveTypeSetting, describedSetting, Settings } from '../types';
-import { createContext, createSettings } from '../../test/utils';
+import { createContext, createSettings } from '../test/utils';
 import { setLocalSetting } from '../localSettings';
 
 test('parseSettings', () => {
