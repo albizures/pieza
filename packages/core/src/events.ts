@@ -1,4 +1,4 @@
-import type p5 from 'p5';
+import p5 from 'p5';
 import { useContext } from './hooks';
 import { singleRun } from './utils/hooks';
 import {
@@ -8,10 +8,10 @@ import {
 	P5EventsNames,
 } from './types';
 
-function windowResized() {
+const windowResized = () => {
 	const context = useContext();
-  context.resizeCanvas(context.windowWidth, context.windowHeight);
-}
+	context.resizeCanvas(context.windowWidth, context.windowHeight);
+};
 
 const wrapEventHandler = <S>(fn: P5EventHandler, data: PiezaData<S>) => {
 	const handler: P5EventHandler = () => {
@@ -30,7 +30,7 @@ const wrapEventHandlers = <T, S>(
 
 		if (handler) {
 			handlers[name] = wrapEventHandler(handler, data);
-		}else if (name ===P5EventsNames.windowResized) {
+		} else if (name === P5EventsNames.windowResized) {
 			handlers.windowResized = wrapEventHandler(windowResized, data);
 		}
 	});
@@ -45,10 +45,7 @@ const eachName = (fn: (name: P5EventsNames) => void) => {
 	});
 };
 
-const setEventHandlers = (
-	handlers: P5EventHandlers,
-	context: p5,
-) => {
+const setEventHandlers = (handlers: P5EventHandlers, context: p5) => {
 	eachName((name) => {
 		const handler = handlers[name];
 

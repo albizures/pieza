@@ -1,31 +1,16 @@
 import {
-	Size,
 	Context,
 	PiezaData,
-	SettingsFactory,
-	Setup,
 	PiezaSize,
 	PiezaConfig,
 	Settings,
 	ConfigSettings,
-	ConfigSettingsValue,
 } from './types';
-import { parseSettings } from './settings';
-import { clean, isClient, defaultSetup } from './utils';
-import { getLocalSettings, setLocalSetting } from './localSettings';
+import { getSettings } from './settings';
+import { clear, isClient, defaultSetup, runSetup, parseSize } from './utils';
+import { setLocalSetting } from './localSettings';
 import { run } from './utils/hooks';
 import { wrapEventHandlers, setEventHandlers } from './events';
-
-const parseSize = (size: PiezaSize): Size => {
-	if (typeof size === 'number') {
-		return {
-			width: size,
-			height: size,
-		};
-	}
-
-	return size;
-};
 
 export interface Pieza {
 	attach: (parent: HTMLElement) => Promise<void>;
@@ -38,49 +23,12 @@ const piezasData = new Map<string, PiezaData<any>>();
 export type Piezas = typeof piezas;
 export type PiezasData = typeof piezasData;
 
-const runSetup = <S>(setup: Setup<S>, data: PiezaData<S>) => () => {
-	const state = setup();
-	if (state) {
-		data.state = state;
-	}
-};
-
 const defaultSize: PiezaSize = isClient
 	? {
 			height: window.innerHeight,
 			width: window.innerWidth,
 	  }
 	: 360;
-
-/**
- * checks local settings and merge them if
- * it's needed and returns their description
- */
-const getSettings = <T extends Settings>(
-	name: string,
-	settings: ConfigSettings<T>,
-	context: Context,
-) => {
-	const localSettings = getLocalSettings<T>(name);
-
-	const properties = Object.keys(localSettings);
-
-	if (localSettings && properties.length > 0) {
-		console.warn(
-			`Using local setting for ${properties.join(', ')} in pieza '${name}'`,
-		);
-	}
-
-	const { values, description } = parseSettings(settings, context);
-
-	return {
-		values: {
-			...values,
-			...localSettings,
-		},
-		description: description,
-	};
-};
 
 const addSettings = <T extends Settings, S>(
 	data: PiezaData<S>,
@@ -125,7 +73,8 @@ const addSetup = <S>(data: PiezaData<S>, context: Context) => {
 
 const addDraw = <S>(data: PiezaData<S>, context: Context) => {
 	const { draw, autoClean, update } = data;
-	if (draw) {
+
+	if (!draw) {
 		return;
 	}
 
@@ -136,7 +85,7 @@ const addDraw = <S>(data: PiezaData<S>, context: Context) => {
 	};
 
 	context.draw = () => {
-		run([updateState, autoClean ? clean : null, draw], data);
+		run([updateState, autoClean ? clear : null, draw], data);
 	};
 };
 
@@ -156,7 +105,7 @@ const updateSettingFactory = <S, T extends Settings>(data: PiezaData<S, T>) => (
 	Object.assign(data.settings, { [settingName]: value });
 	setLocalSetting(name, settingName, value);
 
-	run([clean, defaultSetup, runSetup(setup, data), draw], data);
+	run([clear, defaultSetup, runSetup(setup, data), draw], data);
 };
 
 const create = <T extends Settings = {}, S = void>(
@@ -264,4 +213,13 @@ const create = <T extends Settings = {}, S = void>(
 
 const WEBGL = 'webgl';
 
-export { run, WEBGL, create, piezas, piezasData };
+export {
+	run,
+	WEBGL,
+	create,
+	piezas,
+	piezasData,
+	addDraw,
+	addSetup,
+	addSettings,
+};

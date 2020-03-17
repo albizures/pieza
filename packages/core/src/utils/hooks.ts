@@ -1,5 +1,22 @@
-import { setCurrentPiezaData, cleanCurrentPiezaData } from '../hooks';
 import { PiezaData } from '../types';
+
+let currentData: PiezaData<any> | null;
+
+const setCurrentData = <S>(data: PiezaData<S>) => {
+	currentData = data;
+};
+
+const cleanCurrentData = () => {
+	currentData = null;
+};
+
+const getCurrentData = <S>(name: string): PiezaData<S> => {
+	if (!currentData) {
+		throw new Error(`${name} used outside of a pieza`);
+	}
+
+	return currentData;
+};
 
 type AnyFn = (...args: any) => any;
 
@@ -7,9 +24,9 @@ const singleRun = <S, F extends AnyFn>(
 	fn: F | null | undefined,
 	data: PiezaData<S>,
 ): ReturnType<F> | void => {
-	setCurrentPiezaData(data);
+	setCurrentData(data);
 	if (!fn) {
-		cleanCurrentPiezaData();
+		cleanCurrentData();
 		return;
 	}
 	try {
@@ -17,7 +34,7 @@ const singleRun = <S, F extends AnyFn>(
 	} catch (error) {
 		console.error(error);
 	}
-	cleanCurrentPiezaData();
+	cleanCurrentData();
 };
 
 /**
@@ -33,4 +50,11 @@ const run = <S, F extends AnyFn>(
 	});
 };
 
-export { run, singleRun };
+export {
+	run,
+	singleRun,
+	setCurrentData,
+	cleanCurrentData,
+	getCurrentData,
+	currentData,
+};

@@ -1,4 +1,5 @@
-import { Vector } from '../types';
+import { Vector } from 'p5';
+import { Setup, PiezaData, Size, PiezaSize } from '../types';
 import { useContext } from '../hooks';
 
 const drawPoint = (point: Vector) => {
@@ -17,7 +18,7 @@ const defaultSetup = () => {
 	context.strokeWeight(2);
 };
 
-const clean = () => {
+const clear = () => {
 	const context = useContext();
 
 	context.clear();
@@ -31,4 +32,31 @@ const background = (color: string) => {
 
 const isClient = typeof window === 'object';
 
-export { drawPoint, drawLine, clean, background, isClient, defaultSetup };
+const runSetup = <S>(setup: Setup<S>, data: PiezaData<S>) => () => {
+	const state = setup();
+	if (state) {
+		data.state = state;
+	}
+};
+
+const parseSize = (size: PiezaSize): Size => {
+	if (typeof size === 'number') {
+		return {
+			width: size,
+			height: size,
+		};
+	}
+
+	return size;
+};
+
+export {
+	parseSize,
+	drawPoint,
+	drawLine,
+	clear,
+	background,
+	isClient,
+	defaultSetup,
+	runSetup,
+};

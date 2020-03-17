@@ -6,14 +6,15 @@
 	"scripts": {
 		"clean": "rimraf dist",
 		"prebuild": "yarn clean",
-		"watch": "tsc -w",
-		"build": "tsc"
+		"watch": "tsc -w -p tsconfig.build.json",
+		"build": "tsc -p tsconfig.build.json"
 	},
 	"dependencies": {
 		"@types/dom-mediacapture-record": "^1.0.3",
 		"@types/glob": "^7.1.1",
 		"@types/lodash.debounce": "^4.0.6",
 		"@types/p5": "^0.9.0",
+		"csstype": "^2.6.9",
 		"goober": "^1.7.1",
 		"lodash.debounce": "^4.0.8",
 		"p5": "^1.0.0",

@@ -1,4 +1,5 @@
-export { Settings as PiezaSettings } from './types';
-export { create, Pieza, WEBGL } from './pieza';
-export { BooleanSetting, StringSetting, NumberSetting } from './settings';
+export type { Settings as PiezaSettings } from './types';
+export type { Pieza } from './pieza';
+export { create, WEBGL } from './pieza';
+export { BooleanValue, StringValue, NumberValue } from './settings';
 export * from './hooks';

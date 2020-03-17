@@ -17,7 +17,7 @@ type MediaElement = { captureStream: () => MediaStream };
 const createRecorder = (
 	canvas: MediaElement,
 	defaultName: string,
-	videoBitsPerSecond = 2_500_000,
+	videoBitsPerSecond = 2500000,
 ): Recorder => {
 	const mimeType = getMediaSupportedType();
 

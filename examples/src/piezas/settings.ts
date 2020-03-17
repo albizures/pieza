@@ -4,9 +4,9 @@ import {
 	useContext,
 	PiezaSettings,
 	useSettings,
-	BooleanSetting,
-	StringSetting,
-	NumberSetting,
+	BooleanValue,
+	StringValue,
+	NumberValue,
 } from '@pieza/core';
 
 interface Settings extends PiezaSettings {
@@ -26,7 +26,7 @@ export default create<Settings>({
 		context.text(text, 50, 50);
 	},
 	settings: {
-		size: NumberSetting({
+		size: NumberValue({
 			label: 'Size',
 			slide: true,
 			value: 50,
@@ -34,15 +34,15 @@ export default create<Settings>({
 			max: 100,
 			step: 10,
 		}),
-		isDoubleSize: BooleanSetting({
+		isDoubleSize: BooleanValue({
 			label: 'is double size?',
 			value: true,
 		}),
-		value: NumberSetting({
+		value: NumberValue({
 			value: 100,
 			label: 'Value',
 		}),
-		text: StringSetting({
+		text: StringValue({
 			value: 'Hello',
 			label: 'Text',
 		}),

@@ -1,6 +1,4 @@
-import type p5 from 'p5';
-
-export type { Vector } from 'p5';
+import p5 from 'p5';
 
 export type Context = p5;
 
@@ -47,29 +45,28 @@ export interface Recorder {
 }
 
 export type SettingsDescription<T> = {
-	[K in keyof T]: DescribedSetting<T[K]>
+	[K in keyof T]: DescribedSetting<T[K]>;
 };
-
 
 export interface ContextMeasures extends Size {
 	centerX: number;
-	centerY: number
+	centerY: number;
 }
 
 export interface PiezaData<S = unknown, T = unknown> extends P5EventHandlers {
 	context: p5;
 	recorder?: Recorder;
-	measures: ContextMeasures,
+	measures: ContextMeasures;
 	name: string;
 	draw?: Draw;
 	type?: p5.WEBGL | p5.P2D;
 	setup: Setup<S>;
 	update?: Update<S>;
 	state: S;
-	settingsDescription: SettingsDescription<T>
+	settingsDescription: SettingsDescription<T>;
 	autoClean: boolean;
 	settings?: T;
-	settingsPanel: boolean,
+	settingsPanel: boolean;
 }
 
 export enum PrimitiveTypeSetting {
@@ -78,16 +75,15 @@ export enum PrimitiveTypeSetting {
 	Boolean = 'boolean',
 }
 
-export const describedSetting = Symbol('describedSetting')
+export const describedSetting = Symbol('describedSetting');
 
 export type PrimitiveSetting = number | string | boolean;
 export interface DescribedSetting<S> {
 	type: PrimitiveTypeSetting;
 	value: S;
 	label: string;
-	[describedSetting]: true,
+	[describedSetting]: true;
 }
-
 
 export interface NumberSetting extends DescribedSetting<number> {
 	slide: boolean;
@@ -99,17 +95,23 @@ export interface NumberSetting extends DescribedSetting<number> {
 export interface StringSetting extends DescribedSetting<string> {}
 export interface BooleanSetting extends DescribedSetting<boolean> {}
 
-export type Setting = NumberSetting | StringSetting | BooleanSetting | PrimitiveSetting
+export type Setting =
+	| NumberSetting
+	| StringSetting
+	| BooleanSetting
+	| PrimitiveSetting;
 
 export type Settings = Record<string, PrimitiveSetting>;
 
 export type PiezaSize = number | Size;
 
 export type ConfigSettingsValue<S> = {
-	[T in keyof S]: DescribedSetting<S[T]> | S[T]
-}
+	[T in keyof S]: DescribedSetting<S[T]> | S[T];
+};
 
-export type ConfigSettings<T> = SettingsFactory<ConfigSettingsValue<T>> | ConfigSettingsValue<T>;
+export type ConfigSettings<T> =
+	| SettingsFactory<ConfigSettingsValue<T>>
+	| ConfigSettingsValue<T>;
 
 export interface PiezaConfig<T extends Settings, S> extends P5EventHandlers {
 	name: string;
@@ -121,6 +123,6 @@ export interface PiezaConfig<T extends Settings, S> extends P5EventHandlers {
 	draw?: Draw;
 	update?: Update<S>;
 	state?: S;
-	settingsPanel?: boolean,
-	settings?: ConfigSettings<T>,
+	settingsPanel?: boolean;
+	settings?: ConfigSettings<T>;
 }

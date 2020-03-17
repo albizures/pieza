@@ -1,36 +1,18 @@
-import { PiezaData } from './types';
+import { getCurrentData } from './utils/hooks';
 import { createRecorder } from './utils/recorder';
 
-let currentPiezaData: PiezaData<any> | null;
-
-const setCurrentPiezaData = <S>(data: PiezaData<S>) => {
-	currentPiezaData = data;
-};
-
-const cleanCurrentPiezaData = () => {
-	currentPiezaData = null;
-};
-
-const checkCurrentPieza = <S>(name: string): PiezaData<S> => {
-	if (!currentPiezaData) {
-		throw new Error(`${name} used outside of a pieza`);
-	}
-
-	return currentPiezaData;
-};
-
 const useSettings = <T>(): T => {
-	return checkCurrentPieza('useSettings').settings as T;
+	return getCurrentData('useSettings').settings as T;
 };
 
 const useContext = () => {
-	return checkCurrentPieza('useContext').context;
+	return getCurrentData('useContext').context;
 };
 
 type MutableState<S> = [S, (state: S) => void];
 
 const useMutableState = <S>(): MutableState<S> => {
-	const data = checkCurrentPieza('useState');
+	const data = getCurrentData('useState');
 
 	return [
 		data.state as S,
@@ -41,15 +23,15 @@ const useMutableState = <S>(): MutableState<S> => {
 };
 
 const useState = <S>() => {
-	return checkCurrentPieza('useState').state as S;
+	return getCurrentData('useState').state as S;
 };
 
 const useMeasures = () => {
-	return checkCurrentPieza('useSize').measures;
+	return getCurrentData('useSize').measures;
 };
 
 const useRecorder = () => {
-	const data = checkCurrentPieza('useRecorder');
+	const data = getCurrentData('useRecorder');
 
 	if (data.recorder) {
 		return data.recorder;
@@ -69,7 +51,5 @@ export {
 	useContext,
 	useRecorder,
 	useSettings,
-	setCurrentPiezaData,
-	cleanCurrentPiezaData,
 	useMutableState,
 };

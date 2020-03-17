@@ -1,0 +1,14 @@
+{
+	"compilerOptions": {
+		"strict": true,
+		"lib": ["dom"],
+		"strictNullChecks": true,
+		"allowUnreachableCode": true,
+		"allowJs": false,
+		"target": "ESNext",
+		"isolatedModules": true,
+		"esModuleInterop": true,
+		"declaration": true,
+		"composite": true
+	}
+}

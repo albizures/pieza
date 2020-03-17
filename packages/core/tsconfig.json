@@ -1,18 +1,9 @@
 {
+	"extends": "../../tsconfig.base.json",
 	"compilerOptions": {
-		"rootDir": "./src",
-		"outDir": "dist",
-		"strict": true,
-		"lib": ["dom"],
-		"strictNullChecks": true,
-		"declarationDir": "dist",
-		"allowUnreachableCode": true,
-		"allowJs": false,
-		"target": "ESNext",
-		"module": "CommonJS",
-		"esModuleInterop": true,
-		"declaration": true,
-		"composite": true
+		"rootDir": "./",
+		"module": "ESNext",
+		"moduleResolution": "node"
 	},
-	"include": ["./src/**/*.ts"]
+	"include": ["./src/**/*.ts", "./test/**/*.ts"]
 }

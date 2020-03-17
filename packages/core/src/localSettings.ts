@@ -1,7 +1,7 @@
 import { isClient } from './utils';
-const getLocalSettings = <T extends object>(name: string) => {
+const getLocalSettings = <T extends object>(name: string): T => {
 	if (!isClient) {
-		return {};
+		return {} as T;
 	}
 
 	const rawSetting = localStorage.getItem(`${name}-pieza-settings`);
@@ -10,10 +10,10 @@ const getLocalSettings = <T extends object>(name: string) => {
 		try {
 			return JSON.parse(rawSetting) as T;
 		} catch (error) {
-			return {};
+			return {} as T;
 		}
 	}
-	return {};
+	return {} as T;
 };
 
 const setLocalSetting = (name: string, settingName: string, value: unknown) => {

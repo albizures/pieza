@@ -1,4 +1,5 @@
-import { Optional, Required } from 'utility-types';
+import { Required } from 'utility-types';
+import { getLocalSettings } from './localSettings';
 import {
 	Context,
 	Settings,
@@ -27,10 +28,12 @@ const isDescribedSetting = <T>(
 		(setting as DescribedSetting<T>)[describedSetting]
 	);
 };
+
 type ParsedSettings<T extends Settings> = {
 	description: SettingsDescription<T>;
 	values: Settings;
 };
+
 const parseSettings = <T extends Settings>(
 	settings: ConfigSettings<T>,
 	context: Context,
@@ -68,6 +71,36 @@ const parseSettings = <T extends Settings>(
 	}, seed) as ParsedSettings<T>;
 };
 
+/**
+ * checks local settings and merge them if
+ * it's needed and returns their description
+ */
+const getSettings = <T extends Settings>(
+	name: string,
+	settings: ConfigSettings<T>,
+	context: Context,
+): { values: T; description: SettingsDescription<T> } => {
+	const localSettings = getLocalSettings<T>(name);
+
+	const properties = Object.keys(localSettings);
+
+	if (localSettings && properties.length > 0) {
+		console.warn(
+			`Using local setting for ${properties.join(', ')} in pieza '${name}'`,
+		);
+	}
+
+	const { values, description } = parseSettings(settings, context);
+
+	return {
+		values: {
+			...values,
+			...localSettings,
+		},
+		description: description,
+	};
+};
+
 type SettingOptions<S> = Partial<Omit<S, 'type' | symbol>>;
 
 type NumberSettingOptions = Required<
@@ -85,7 +118,7 @@ type StringSettingOptions = Required<
 	'label' | 'value'
 >;
 
-const NumberSetting = ({
+const NumberValue = ({
 	value,
 	label,
 	min = -Infinity,
@@ -103,7 +136,7 @@ const NumberSetting = ({
 	[describedSetting]: true,
 });
 
-const BooleanSetting = ({
+const BooleanValue = ({
 	value,
 	label,
 }: BooleanSettingOptions): BooleanSetting => ({
@@ -113,7 +146,7 @@ const BooleanSetting = ({
 	[describedSetting]: true,
 });
 
-const StringSetting = ({
+const StringValue = ({
 	value,
 	label,
 }: StringSettingOptions): StringSetting => ({
@@ -123,4 +156,4 @@ const StringSetting = ({
 	[describedSetting]: true,
 });
 
-export { parseSettings, NumberSetting, StringSetting, BooleanSetting };
+export { parseSettings, NumberValue, StringValue, BooleanValue, getSettings };

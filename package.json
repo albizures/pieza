@@ -6,6 +6,7 @@
 	"author": "Jose Albizures <jose@albizures.com>",
 	"license": "MIT",
 	"scripts": {
+		"test": "jest",
 		"bootstrap": "lerna bootstrap",
 		"clean": "lerna clean && lerna run clean",
 		"watch": "lerna run watch"
@@ -19,5 +20,15 @@
 	"dependencies": {
 		"lerna": "^3.20.2",
 		"prettier": "^1.19.1"
+	},
+	"devDependencies": {
+		"@babel/core": "^7.8.7",
+		"@babel/preset-env": "^7.8.7",
+		"@babel/preset-typescript": "^7.8.3",
+		"@types/jest": "^25.1.4",
+		"babel-jest": "^25.1.0",
+		"jest": "^25.1.0",
+		"jest-canvas-mock": "^2.2.0",
+		"jest-localstorage-mock": "^2.4.0"
 	}
 }
