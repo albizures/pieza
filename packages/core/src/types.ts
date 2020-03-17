@@ -101,7 +101,7 @@ export type Setting =
 	| BooleanSetting
 	| PrimitiveSetting;
 
-export type Settings = Record<string, PrimitiveSetting>;
+// export type Settings = Record<string, PrimitiveSetting>;
 
 export type PiezaSize = number | Size;
 
@@ -113,7 +113,7 @@ export type ConfigSettings<T> =
 	| SettingsFactory<ConfigSettingsValue<T>>
 	| ConfigSettingsValue<T>;
 
-export interface PiezaConfig<T extends Settings, S> extends P5EventHandlers {
+export interface PiezaConfig<T extends object, S> extends P5EventHandlers {
 	name: string;
 	autoAttach?: boolean;
 	autoClean?: boolean;

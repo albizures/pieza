@@ -5,7 +5,7 @@ import {
 	NumberValue,
 	getSettings,
 } from '../settings';
-import { PrimitiveTypeSetting, describedSetting, Settings } from '../types';
+import { PrimitiveTypeSetting, describedSetting } from '../types';
 import { createContext, createSettings } from '../test/utils';
 import { setLocalSetting } from '../localSettings';
 
@@ -69,7 +69,7 @@ test('parseSettings', () => {
 	});
 });
 
-interface TestSettings extends Settings {
+interface TestSettings {
 	mySetting: number;
 }
 

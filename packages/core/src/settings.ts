@@ -2,7 +2,6 @@ import { Required } from 'utility-types';
 import { getLocalSettings } from './localSettings';
 import {
 	Context,
-	Settings,
 	SettingsFactory,
 	SettingsDescription,
 	describedSetting,
@@ -29,12 +28,12 @@ const isDescribedSetting = <T>(
 	);
 };
 
-type ParsedSettings<T extends Settings> = {
+type ParsedSettings<T extends object> = {
 	description: SettingsDescription<T>;
-	values: Settings;
+	values: T;
 };
 
-const parseSettings = <T extends Settings>(
+const parseSettings = <T extends object>(
 	settings: ConfigSettings<T>,
 	context: Context,
 ): ParsedSettings<T> => {
@@ -50,32 +49,38 @@ const parseSettings = <T extends Settings>(
 		values,
 	};
 
-	return Object.keys(settings).reduce((parsed, key: keyof T) => {
+	const result = Object.keys(settings).reduce((parsed, key) => {
+		// @ts-ignore
 		const setting = settings[key];
-		type SettingType = T[keyof T];
 
-		if (isDescribedSetting<SettingType>(setting)) {
-			parsed.description[key] = setting as DescribedSetting<SettingType>;
-			parsed.values[key] = setting.value as SettingType;
+		if (isDescribedSetting(setting)) {
+			// @ts-ignore
+			parsed.description[key] = setting;
+			// @ts-ignore
+			parsed.values[key] = setting.value;
 		} else {
+			// @ts-ignore
 			parsed.description[key] = {
-				type: typeof setting as PrimitiveTypeSetting,
-				value: setting as SettingType,
-				label: key as string,
+				type: typeof setting,
+				value: setting,
+				label: key,
 				[describedSetting]: true,
 			};
-			parsed.values[key] = setting as SettingType;
+			// @ts-ignore
+			parsed.values[key] = setting;
 		}
 
 		return parsed;
-	}, seed) as ParsedSettings<T>;
+	}, seed);
+
+	return (result as unknown) as ParsedSettings<T>;
 };
 
 /**
  * checks local settings and merge them if
  * it's needed and returns their description
  */
-const getSettings = <T extends Settings>(
+const getSettings = <T extends object>(
 	name: string,
 	settings: ConfigSettings<T>,
 	context: Context,

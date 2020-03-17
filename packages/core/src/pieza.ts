@@ -3,7 +3,6 @@ import {
 	PiezaData,
 	PiezaSize,
 	PiezaConfig,
-	Settings,
 	ConfigSettings,
 } from './types';
 import { getSettings } from './settings';
@@ -30,7 +29,7 @@ const defaultSize: PiezaSize = isClient
 	  }
 	: 360;
 
-const addSettings = <T extends Settings, S>(
+const addSettings = <T extends object, S>(
 	data: PiezaData<S>,
 	context: Context,
 	settings?: ConfigSettings<T>,
@@ -89,7 +88,7 @@ const addDraw = <S>(data: PiezaData<S>, context: Context) => {
 	};
 };
 
-const updateSettingFactory = <S, T extends Settings>(data: PiezaData<S, T>) => (
+const updateSettingFactory = <S, T extends object>(data: PiezaData<S, T>) => (
 	settingName: string,
 	value: unknown,
 ) => {
@@ -108,9 +107,7 @@ const updateSettingFactory = <S, T extends Settings>(data: PiezaData<S, T>) => (
 	run([clear, defaultSetup, runSetup(setup, data), draw], data);
 };
 
-const create = <T extends Settings = {}, S = void>(
-	config: PiezaConfig<T, S>,
-) => {
+const create = <T extends object = {}, S = void>(config: PiezaConfig<T, S>) => {
 	const {
 		setup,
 		type,

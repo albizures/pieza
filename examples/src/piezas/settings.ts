@@ -2,14 +2,13 @@
 import {
 	create,
 	useContext,
-	PiezaSettings,
 	useSettings,
 	BooleanValue,
 	StringValue,
 	NumberValue,
 } from '@pieza/core';
 
-interface Settings extends PiezaSettings {
+interface Settings {
 	value: number;
 	text: string;
 	size: number;
