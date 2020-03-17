@@ -3,6 +3,7 @@
 		"rootDir": "./src",
 		"outDir": "dist",
 		"strict": true,
+		"lib": ["dom"],
 		"strictNullChecks": true,
 		"declarationDir": "dist",
 		"allowUnreachableCode": true,

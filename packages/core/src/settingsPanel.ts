@@ -5,6 +5,7 @@ import {
 	DescribedSetting,
 	NumberSetting,
 } from './types';
+import { debounce } from './utils';
 
 const styles = {
 	container: css`
@@ -64,6 +65,7 @@ const createId = (name: string, label: string) => {
 const createSetting = <S, T>(
 	data: PiezaData<S, T>,
 	name: keyof PiezaData<S, T>['settingsDescription'],
+	onChange: (name: string, value: unknown) => void,
 ) => {
 	const { settingsDescription, context } = data;
 	const setting = settingsDescription[name];
@@ -77,10 +79,19 @@ const createSetting = <S, T>(
 		.createInput()
 		.attribute('id', id)
 		.class(styles.input);
-
+	const inputElement = input.elt as HTMLInputElement;
 	const elements = [label, input];
 
-	if (setting.type === PrimitiveTypeSetting.Boolean) {
+	const isBoolean = setting.type === PrimitiveTypeSetting.Boolean;
+
+	const handleChange = () => {
+		onChange(name as string, isBoolean ? inputElement.checked : input.value());
+	};
+
+	inputElement.addEventListener('change', handleChange);
+	inputElement.addEventListener('keydown', handleChange);
+
+	if (isBoolean) {
 		elements.reverse();
 		input.attribute('type', 'checkbox').addClass(styles.checkbox);
 		if (setting.value) {
@@ -101,7 +112,6 @@ const createSetting = <S, T>(
 
 		if (setting.slide) {
 			input.attribute('type', 'range').addClass(styles.range);
-			console.log(setting);
 
 			if (setting.step) {
 				input.attribute('step', String(setting.step));
@@ -127,7 +137,12 @@ const createResizeBar = <S, T>(data: PiezaData<S, T>) => {
 	return resizeBar;
 };
 
-const createSettingsPanel = <S, T>(data: PiezaData<S, T>) => {
+type UpdateSetting = (settingName: string, value: unknown) => void;
+
+const createSettingsPanel = <S, T>(
+	data: PiezaData<S, T>,
+	updateSetting: UpdateSetting,
+) => {
 	glob`
 		body {
 			font-size: 1rem;
@@ -141,9 +156,17 @@ const createSettingsPanel = <S, T>(data: PiezaData<S, T>) => {
 		.child(createResizeBar(data))
 		.addClass(styles.container);
 
+	const onChange = debounce((name: string, value: unknown) => {
+		updateSetting(name, value);
+	}, 100);
+
 	Object.keys(settingsDescription).forEach((name) => {
 		container.child(
-			createSetting(data, name as keyof PiezaData<S, T>['settingsDescription']),
+			createSetting(
+				data,
+				name as keyof PiezaData<S, T>['settingsDescription'],
+				onChange,
+			),
 		);
 	});
 };

@@ -20,6 +20,10 @@ const singleRun = <S, F extends AnyFn>(
 	cleanCurrentPiezaData();
 };
 
+/**
+ * run all the given functions within a
+ * pieza context and ignores their result
+ */
 const run = <S, F extends AnyFn>(
 	fns: (F | null | undefined)[],
 	data: PiezaData<S>,

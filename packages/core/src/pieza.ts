@@ -7,6 +7,7 @@ import {
 	PiezaSize,
 	PiezaConfig,
 	Settings,
+	ConfigSettings,
 	ConfigSettingsValue,
 } from './types';
 import { parseSettings } from './settings';
@@ -52,61 +53,91 @@ const defaultSize: PiezaSize = isClient
 	  }
 	: 360;
 
-const attachFactory = <T extends Settings, S>(
-	config: PiezaConfig<T, S>,
-	data: PiezaData<S>,
-	localSettings: object,
-	settings?: SettingsFactory<ConfigSettingsValue<T>> | ConfigSettingsValue<T>,
-) => async (parent: HTMLElement) => {
-	const { sizeAndCenter, type, draw, setup, autoClean, update } = data;
+/**
+ * checks local settings and merge them if
+ * it's needed and returns their description
+ */
+const getSettings = <T extends Settings>(
+	name: string,
+	settings: ConfigSettings<T>,
+	context: Context,
+) => {
+	const localSettings = getLocalSettings<T>(name);
 
-	const { default: p5 } = await import('p5');
-	new p5((sketch: Context) => {
-		data.context = sketch;
+	const properties = Object.keys(localSettings);
 
-		setEventHandlers(config, sketch);
+	if (localSettings && properties.length > 0) {
+		console.warn(
+			`Using local setting for ${properties.join(', ')} in pieza '${name}'`,
+		);
+	}
 
-		sketch.setup = () => {
-			sketch.createCanvas(sizeAndCenter.width, sizeAndCenter.height, type);
-			if (!draw) {
-				sketch.noLoop();
-			}
+	const { values, description } = parseSettings(settings, context);
 
-			if (settings) {
-				const { values, description } = parseSettings(settings, sketch);
-
-				data.settingsDescription = description;
-				data.settings = {
-					...values,
-					...localSettings,
-				};
-			}
-
-			createSettingsPanel(data);
-
-			run([defaultSetup, runSetup(setup, data), draw], data);
-		};
-
-		if (draw) {
-			const updateState = () => {
-				if (typeof update === 'function') {
-					data.state = update(data.state);
-				}
-			};
-			sketch.draw = () => {
-				run([updateState, autoClean ? clean : null, draw], data);
-			};
-		}
-	}, parent);
+	return {
+		values: {
+			...values,
+			...localSettings,
+		},
+		description: description,
+	};
 };
 
-const updateSettingFactory = <S>(data: PiezaData<S>) => (
+const addSettings = <T extends Settings, S>(
+	data: PiezaData<S>,
+	context: Context,
+	settings?: ConfigSettings<T>,
+) => {
+	const { name } = data;
+	if (settings) {
+		const { values, description } = getSettings(name, settings, context);
+
+		data.settingsDescription = description;
+		data.settings = values;
+	}
+};
+
+const addSetup = <S>(data: PiezaData<S>, context: Context) => {
+	const { draw, sizeAndCenter, type, setup } = data;
+	context.setup = () => {
+		context.createCanvas(sizeAndCenter.width, sizeAndCenter.height, type);
+		if (!draw) {
+			context.noLoop();
+		}
+
+		run([defaultSetup, runSetup(setup, data), draw], data);
+	};
+};
+
+const addDraw = <S>(data: PiezaData<S>, context: Context) => {
+	const { draw, autoClean, update } = data;
+	if (draw) {
+		return;
+	}
+
+	const updateState = () => {
+		if (typeof update === 'function') {
+			data.state = update(data.state);
+		}
+	};
+
+	context.draw = () => {
+		run([updateState, autoClean ? clean : null, draw], data);
+	};
+};
+
+const updateSettingFactory = <S, T extends Settings>(data: PiezaData<S, T>) => (
 	settingName: string,
 	value: unknown,
 ) => {
 	const { setup, draw } = data;
-	// @ts-ignore
-	if (value === data.settings[settingName]) {
+	if (!data || !data.settings) {
+		return;
+	}
+
+	console.log(settingName, value);
+
+	if (!(settingName in data.settings)) {
 		return;
 	}
 
@@ -144,20 +175,10 @@ const create = <T extends Settings = {}, S = void>(
 		throw new Error(`Name already used: '${name}'`);
 	}
 
-	const localSettings = getLocalSettings<T>(name);
-
 	const size = parseSize(rawSize);
 
-	const properties = Object.keys(localSettings);
-
-	if (localSettings && properties.length > 0) {
-		console.warn(
-			`Using local setting for ${properties.join(', ')} in pieza '${name}'`,
-		);
-	}
-
 	let context: Context;
-	const data: PiezaData<S> = {
+	const data: PiezaData<S, {}> = {
 		state: defaultState,
 		type,
 		name,
@@ -184,9 +205,28 @@ const create = <T extends Settings = {}, S = void>(
 
 	piezasData.set(name, data);
 
+	const updateSetting = updateSettingFactory(data);
+
+	const setupPieza = (context: Context) => {
+		data.context = context;
+
+		setEventHandlers(config, context);
+
+		addSettings(data, context, settings);
+
+		createSettingsPanel(data, updateSetting);
+
+		addSetup(data, context);
+
+		addDraw(data, context);
+	};
+
 	const pieza = {
-		attach: attachFactory<T, S>(config, data, localSettings, settings),
-		updateSetting: updateSettingFactory(data),
+		attach: async (parent: HTMLElement) => {
+			const { default: p5 } = await import('p5');
+			new p5((context: Context) => setupPieza(context), parent);
+		},
+		updateSetting,
 	};
 
 	if (autoAttach && isClient) {
