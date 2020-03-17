@@ -44,8 +44,8 @@ const useState = <S>() => {
 	return checkCurrentPieza('useState').state as S;
 };
 
-const useSize = () => {
-	return checkCurrentPieza('useSize').sizeAndCenter;
+const useMeasures = () => {
+	return checkCurrentPieza('useSize').measures;
 };
 
 const useRecorder = () => {
@@ -64,7 +64,7 @@ const useRecorder = () => {
 };
 
 export {
-	useSize,
+	useMeasures,
 	useState,
 	useContext,
 	useRecorder,

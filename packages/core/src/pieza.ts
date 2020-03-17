@@ -97,12 +97,27 @@ const addSettings = <T extends Settings, S>(
 };
 
 const addSetup = <S>(data: PiezaData<S>, context: Context) => {
-	const { draw, sizeAndCenter, type, setup } = data;
+	const { draw, measures, type, setup } = data;
 	context.setup = () => {
-		context.createCanvas(sizeAndCenter.width, sizeAndCenter.height, type);
+		context.createCanvas(measures.width, measures.height, type);
 		if (!draw) {
 			context.noLoop();
 		}
+
+		data.measures = {
+			get width() {
+				return context.width;
+			},
+			get height() {
+				return context.height;
+			},
+			get centerX() {
+				return context.width / 2;
+			},
+			get centerY() {
+				return context.height / 2;
+			},
+		};
 
 		run([defaultSetup, runSetup(setup, data), draw], data);
 	};
@@ -191,7 +206,9 @@ const create = <T extends Settings = {}, S = void>(
 		set context(value) {
 			context = value;
 		},
-		sizeAndCenter: {
+
+		// these number are temporal
+		measures: {
 			...size,
 			centerX: size.width / 2,
 			centerY: size.height / 2,

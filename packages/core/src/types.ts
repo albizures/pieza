@@ -50,10 +50,16 @@ export type SettingsDescription<T> = {
 	[K in keyof T]: DescribedSetting<T[K]>
 };
 
+
+export interface ContextMeasures extends Size {
+	centerX: number;
+	centerY: number
+}
+
 export interface PiezaData<S = unknown, T = unknown> extends P5EventHandlers {
 	context: p5;
 	recorder?: Recorder;
-	sizeAndCenter: Size & { centerX: number; centerY: number };
+	measures: ContextMeasures,
 	name: string;
 	draw?: Draw;
 	type?: p5.WEBGL | p5.P2D;
