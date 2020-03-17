@@ -157,6 +157,7 @@ const create = <T extends Settings = {}, S = void>(
 		settings,
 		draw,
 		update,
+		settingsPanel = true,
 		state: defaultState = {} as S,
 	} = config;
 
@@ -196,6 +197,7 @@ const create = <T extends Settings = {}, S = void>(
 			centerY: size.height / 2,
 		},
 		settings: {},
+		settingsPanel,
 	};
 
 	wrapEventHandlers(config, data);
@@ -215,7 +217,11 @@ const create = <T extends Settings = {}, S = void>(
 
 		addDraw(data, context);
 
-		if (data.settings && Object.keys(data.settings).length > 0) {
+		if (
+			data.settings &&
+			Object.keys(data.settings).length > 0 &&
+			settingsPanel
+		) {
 			import('./settingsPanel').then(({ createSettingsPanel }) => {
 				createSettingsPanel(data, updateSetting);
 			});

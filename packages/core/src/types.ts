@@ -63,6 +63,7 @@ export interface PiezaData<S = unknown, T = unknown> extends P5EventHandlers {
 	settingsDescription: SettingsDescription<T>
 	autoClean: boolean;
 	settings?: T;
+	settingsPanel: boolean,
 }
 
 export enum PrimitiveTypeSetting {
@@ -114,5 +115,6 @@ export interface PiezaConfig<T extends Settings, S> extends P5EventHandlers {
 	draw?: Draw;
 	update?: Update<S>;
 	state?: S;
+	settingsPanel?: boolean,
 	settings?: ConfigSettings<T>,
 }
