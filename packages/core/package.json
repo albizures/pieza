@@ -1,6 +1,6 @@
 {
 	"name": "@pieza/core",
-	"version": "0.0.1",
+	"version": "0.1.0",
 	"main": "dist/index.js",
 	"author": "Jose Albizures <jose@albizures.com>",
 	"scripts": {
@@ -24,6 +24,5 @@
 	},
 	"files": [
 		"dist"
-	],
-	"devDependencies": {}
+	]
 }
