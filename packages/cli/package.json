@@ -9,8 +9,7 @@
 	},
 	"scripts": {
 		"clean": "rm -rf dist",
-		"watch": "tsc -w",
-		"postversion": "standard-version"
+		"watch": "tsc -w"
 	},
 	"files": [
 		"dist",
@@ -43,7 +42,6 @@
 		"@types/node": "^13.9.0",
 		"@types/webpack": "^4.41.7",
 		"@types/webpack-dev-server": "^3.10.0",
-		"standard-version": "^7.1.0",
 		"typescript": "^3.8.3"
 	}
 }

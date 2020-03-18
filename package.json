@@ -11,7 +11,7 @@
 		"clean": "lerna clean && lerna run clean",
 		"watch": "lerna run watch",
 		"build": "lerna run build",
-		"release": "lerna version && lerna publish from-git"
+		"release": "lerna version --conventional-commits && lerna publish from-git"
 	},
 	"workspaces": {
 		"packages": [

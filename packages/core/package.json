@@ -8,8 +8,7 @@
 		"prewatch": "yarn clean",
 		"watch": "tsc -w -p tsconfig.build.json ",
 		"prebuild": "yarn clean",
-		"build": "tsc -p tsconfig.build.json",
-		"postversion": "standard-version"
+		"build": "tsc -p tsconfig.build.json"
 	},
 	"dependencies": {
 		"@types/dom-mediacapture-record": "^1.0.3",
@@ -26,7 +25,5 @@
 	"files": [
 		"dist"
 	],
-	"devDependencies": {
-		"standard-version": "^7.1.0"
-	}
+	"devDependencies": {}
 }
