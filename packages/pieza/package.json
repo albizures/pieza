@@ -12,6 +12,9 @@
 		"prebuild": "yarn clean",
 		"build": "tsc -p tsconfig.build.json"
 	},
+	"files": [
+		"dist"
+	],
 	"dependencies": {
 		"@pieza/cli": "^0.2.0",
 		"@pieza/core": "^0.1.1"

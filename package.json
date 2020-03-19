@@ -11,6 +11,7 @@
 		"clean": "lerna clean && lerna run clean",
 		"watch": "lerna run watch",
 		"build": "lerna run build",
+		"prerelease": "yarn build",
 		"release": "cross-env HUSKY_BYPASS=true lerna version --conventional-commits && lerna publish from-git"
 	},
 	"workspaces": {

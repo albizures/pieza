@@ -10,7 +10,9 @@
 	"scripts": {
 		"clean": "rm -rf dist && rimraf *.tsbuildinfo",
 		"prewatch": "yarn clean",
-		"watch": "tsc -w"
+		"watch": "tsc -w",
+		"prebuild": "yarn clean",
+		"build": "tsc"
 	},
 	"files": [
 		"dist",
