@@ -16,7 +16,8 @@
 	},
 	"files": [
 		"dist",
-		"bin"
+		"bin",
+		"template.html"
 	],
 	"oclif": {
 		"commands": "./dist/commands",
