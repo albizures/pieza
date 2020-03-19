@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [0.4.1](https://github.com/albizures/pieza/compare/@pieza/cli@0.4.0...@pieza/cli@0.4.1) (2020-03-19)
+
+
+### Bug Fixes
+
+* **cli:** use chunkhashes instead ([b2803d7](https://github.com/albizures/pieza/commit/b2803d7a9166c204db5d2f03a27780d142a73e96))
+
+
+
+
+
 # [0.4.0](https://github.com/albizures/pieza/compare/@pieza/cli@0.3.0...@pieza/cli@0.4.0) (2020-03-19)
 
 
