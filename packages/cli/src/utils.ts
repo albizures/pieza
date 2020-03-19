@@ -57,6 +57,15 @@ const getPlugins = async (files: string[]): Promise<HtmlWebpackPlugin[]> => {
 			xhtml: true,
 			title: getPiezaName(file) || name,
 			filename: `${name}.html`,
+			minify: process.env.NODE_ENV === 'production' && {
+				collapseWhitespace: true,
+				removeComments: true,
+				removeRedundantAttributes: true,
+				removeScriptTypeAttributes: true,
+				removeStyleLinkTypeAttributes: true,
+				useShortDoctype: true,
+				minifyCSS: true,
+			},
 			template: path.join(__dirname, '..', 'template.html'),
 		});
 	});

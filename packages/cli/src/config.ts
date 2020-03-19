@@ -23,7 +23,7 @@ const defaultWebpackConfig: Configuration = {
 		usedExports: true,
 	},
 	stats: 'none',
-	mode: process.env.NODE_ENV === 'production' ? 'production' : 'development',
+	mode: 'development',
 	module: {
 		rules: [
 			{
@@ -36,6 +36,19 @@ const defaultWebpackConfig: Configuration = {
 			},
 		],
 	},
+	resolve: {
+		extensions: ['.js', '.ts'],
+	},
 };
+
+if (process.env.NODE_ENV === 'production') {
+	defaultWebpackConfig.mode = 'production';
+
+	if (defaultWebpackConfig.resolve) {
+		defaultWebpackConfig.resolve.alias = {
+			p5: require.resolve('p5/lib/p5.min.js'),
+		};
+	}
+}
 
 export { defaultBabelConfig, defaultWebpackConfig };
