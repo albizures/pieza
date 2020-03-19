@@ -67,10 +67,8 @@ const createRecorder = (
 		a.style.display = 'none';
 		a.href = url;
 		a.download = name;
-		document.body.appendChild(a);
 		a.click();
 		setTimeout(() => {
-			document.body.removeChild(a);
 			URL.revokeObjectURL(url);
 		}, 300);
 	};
