@@ -3,6 +3,18 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [0.3.0](https://github.com/albizures/pieza/compare/@pieza/cli@0.2.1...@pieza/cli@0.3.0) (2020-03-19)
+
+
+### Features
+
+* **cli:** improve build config ([897d865](https://github.com/albizures/pieza/commit/897d8658ce4d2e66a9001e1d590d8970bee6c84f))
+* **cli:** show the list of sketches ([83cdf0e](https://github.com/albizures/pieza/commit/83cdf0eb54d4efb02f47a24f8661dac4b6963feb))
+
+
+
+
+
 ## [0.2.1](https://github.com/albizures/pieza/compare/@pieza/cli@0.2.0...@pieza/cli@0.2.1) (2020-03-19)
 
 

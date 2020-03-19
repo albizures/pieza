@@ -3,6 +3,22 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [0.2.0](https://github.com/albizures/pieza/compare/@pieza/core@0.1.1...@pieza/core@0.2.0) (2020-03-19)
+
+
+### Bug Fixes
+
+* **typescript :** use esnext modules ([1a5fd9a](https://github.com/albizures/pieza/commit/1a5fd9ac946783793a539ba8c24ca069ecac0fc1))
+
+
+### Features
+
+* **events:** add windowResized only when there is draw function ([fbdd196](https://github.com/albizures/pieza/commit/fbdd196f266a4193254301d543e2ed7b4f142ac5))
+
+
+
+
+
 ## [0.1.1](https://github.com/albizures/pieza/compare/@pieza/core@0.1.0...@pieza/core@0.1.1) (2020-03-19)
 
 
