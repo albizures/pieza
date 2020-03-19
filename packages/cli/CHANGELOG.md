@@ -3,6 +3,18 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [0.2.1](https://github.com/albizures/pieza/compare/@pieza/cli@0.2.0...@pieza/cli@0.2.1) (2020-03-19)
+
+
+### Bug Fixes
+
+* **release:** build before releasing ([bcf1544](https://github.com/albizures/pieza/commit/bcf154461445481bb6196d45117f7fb10667e926))
+* **release:** run test before release ([e5719b2](https://github.com/albizures/pieza/commit/e5719b2405fc2f1def54ddb4a8bcd2d3c1ff10ce))
+
+
+
+
+
 # [0.2.0](https://github.com/albizures/pieza/compare/@pieza/cli@0.1.0...@pieza/cli@0.2.0) (2020-03-19)
 
 
