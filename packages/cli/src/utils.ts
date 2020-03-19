@@ -57,7 +57,7 @@ const getPlugins = async (files: string[]): Promise<HtmlWebpackPlugin[]> => {
 			xhtml: true,
 			title: getPiezaName(file) || name,
 			filename: `${name}.html`,
-			template: path.join(__dirname, 'template.html'),
+			template: path.join(__dirname, '..', 'template.html'),
 		});
 	});
 };
@@ -81,7 +81,7 @@ const createDevServer = (compiler: Compiler, rewrites: Rewrite[]) => {
 };
 
 const getMainFolder = () => {
-	return path.join(appDirectory, 'src/piezas');
+	return path.join(appDirectory, 'src/sketches');
 };
 
 const getRoutes = (filenames: string[]): Rewrite[] => {

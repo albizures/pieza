@@ -8,7 +8,8 @@
 		"pieza": "./bin/run"
 	},
 	"scripts": {
-		"clean": "rm -rf dist",
+		"clean": "rm -rf dist && rimraf *.tsbuildinfo",
+		"prewatch": "yarn clean",
 		"watch": "tsc -w"
 	},
 	"files": [

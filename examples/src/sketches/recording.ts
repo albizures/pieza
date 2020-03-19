@@ -28,8 +28,8 @@ export default create<null, State>({
 		};
 	},
 	update(state: State) {
-		const { value } = state;
-		let change: Change = -1;
+		const { value, change: currentChange } = state;
+		let change: Change = currentChange;
 		if (value > 300) {
 			change = -1;
 		} else if (value < 0) {
