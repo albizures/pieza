@@ -101,8 +101,6 @@ export type Setting =
 	| BooleanSetting
 	| PrimitiveSetting;
 
-// export type Settings = Record<string, PrimitiveSetting>;
-
 export type PiezaSize = number | Size;
 
 export type ConfigSettingsValue<S> = {
