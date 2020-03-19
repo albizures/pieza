@@ -103,10 +103,21 @@ const createSetting = <S, T>(
 	const elements = [label, input];
 
 	const isBoolean = setting.type === PrimitiveTypeSetting.Boolean;
+	const isNumber = setting.type === PrimitiveTypeSetting.Number;
 
 	const handleChange = () => {
-		onChange(name as string, isBoolean ? inputElement.checked : input.value());
+		if (isBoolean) {
+			onChange(name as string, inputElement.checked);
+		} else if (isNumber) {
+			onChange(name as string, Number(input.value()));
+		} else {
+			onChange(name as string, input.value());
+		}
 	};
+
+	if (!setting.type || typeof setting.value === 'object') {
+		input.attribute('disabled', 'disabled');
+	}
 
 	inputElement.addEventListener('change', handleChange);
 	inputElement.addEventListener('keydown', handleChange);

@@ -12,6 +12,7 @@ interface Settings {
 	value: number;
 	text: string;
 	size: number;
+	test: {};
 	isDoubleSize: boolean;
 }
 
@@ -25,6 +26,7 @@ export default create<Settings>({
 		context.text(text, 50, 50);
 	},
 	settings: {
+		test: {},
 		size: NumberValue({
 			label: 'Size',
 			slide: true,
