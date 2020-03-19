@@ -3,6 +3,22 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [1.2.0](https://github.com/albizures/pieza/compare/pieza-examples@1.1.0...pieza-examples@1.2.0) (2020-03-19)
+
+
+### Bug Fixes
+
+* **template:** move out template.html of src ([c483628](https://github.com/albizures/pieza/commit/c483628f3ea679e6c3dbf0df3302a4ea8a57a66b))
+
+
+### Features
+
+* **pieza:** create pieza module ([2ce574f](https://github.com/albizures/pieza/commit/2ce574f1897502e70fc9bf3a01f382b71a533107))
+
+
+
+
+
 # 1.1.0 (2020-03-18)
 
 

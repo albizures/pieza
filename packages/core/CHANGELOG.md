@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [0.1.1](https://github.com/albizures/pieza/compare/@pieza/core@0.1.0...@pieza/core@0.1.1) (2020-03-19)
+
+
+### Bug Fixes
+
+* **recording:** avoid extra click when saving recording ([a4479b2](https://github.com/albizures/pieza/commit/a4479b29346948a9b6e3c7e68dd9f07ceeb3c846))
+
+
+
+
+
 # 0.1.0 (2020-03-18)
 
 

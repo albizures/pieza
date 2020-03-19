@@ -3,6 +3,22 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [0.2.0](https://github.com/albizures/pieza/compare/@pieza/cli@0.1.0...@pieza/cli@0.2.0) (2020-03-19)
+
+
+### Bug Fixes
+
+* **template:** move out template.html of src ([c483628](https://github.com/albizures/pieza/commit/c483628f3ea679e6c3dbf0df3302a4ea8a57a66b))
+
+
+### Features
+
+* **cli:** add spinning when building ([e778cae](https://github.com/albizures/pieza/commit/e778cae29d5d469cbcf29bb360e12231b5bbadf2))
+
+
+
+
+
 # 0.1.0 (2020-03-18)
 
 
