@@ -1,5 +1,5 @@
 // @pieza-name: Pieza examples
-import { create, useContext, useMeasures } from '@pieza/core';
+import { create, useContext, useMeasures } from 'pieza';
 import { drawLine } from '../utils';
 
 export default create({

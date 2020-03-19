@@ -8,7 +8,8 @@ const drawPoint = (point: Vector) => {
 
 const drawLine = (start: Vector, end: Vector) => {
 	const context = useContext();
-	context.line(start.x, start.y, start.z, end.x, end.y, end.z);
+
+	context.line(start.x, start.y, end.x, end.y);
 };
 
 export { drawLine, drawPoint };

@@ -6,7 +6,7 @@ import {
 	BooleanValue,
 	StringValue,
 	NumberValue,
-} from '@pieza/core';
+} from 'pieza';
 
 interface Settings {
 	value: number;

@@ -1,5 +1,5 @@
 // @pieza-name: Recording example
-import { create, useContext, useRecorder, useState } from '@pieza/core';
+import { create, useContext, useRecorder, useState } from 'pieza';
 
 type Change = 1 | -1;
 
