@@ -9,6 +9,13 @@ import webpack, { Configuration, Compiler } from 'webpack';
 import HtmlWebpackPlugin from 'html-webpack-plugin';
 import { defaultWebpackConfig } from './config';
 
+interface Pieza {
+	name: string;
+	from: RegExp;
+	to: string;
+	file: string;
+}
+
 const appDirectory = fs.realpathSync(process.cwd());
 
 const getFiles = (root: string): Promise<string[]> =>
@@ -22,9 +29,9 @@ const getFiles = (root: string): Promise<string[]> =>
 		});
 	});
 
-const getEntries = async (files: string[]): Promise<Record<string, string>> => {
-	return files.reduce((entries, file) => {
-		const { name } = path.parse(file);
+const getEntries = async (piezas: Pieza[]): Promise<Record<string, string>> => {
+	return piezas.reduce((entries, pieza) => {
+		const { name, file } = pieza;
 
 		entries[name] = file;
 
@@ -48,10 +55,10 @@ const getPiezaName = (file: string) => {
 	return undefined;
 };
 
-const getPlugins = async (files: string[]): Promise<HtmlWebpackPlugin[]> => {
-	const names = files.map((file) => path.parse(file).name);
-	return files.map((file) => {
-		const { name } = path.parse(file);
+const getPlugins = async (piezas: Pieza[]): Promise<HtmlWebpackPlugin[]> => {
+	const names = piezas.map((pieza) => pieza.name);
+	return piezas.map((pieza) => {
+		const { name, file } = pieza;
 
 		return new HtmlWebpackPlugin({
 			excludeChunks: names.filter((current) => current !== name),
@@ -96,12 +103,24 @@ const getMainFolder = () => {
 	return path.join(appDirectory, 'src/sketches');
 };
 
-const getRoutes = (filenames: string[]): Rewrite[] => {
-	return filenames.map((filename) => {
-		const { name } = path.parse(filename);
+const getRoutes = (piezas: Pieza[]): Rewrite[] => {
+	return piezas.map((pieza) => {
+		const { from, to } = pieza;
 		return {
+			from,
+			to,
+		};
+	});
+};
+
+const parseFiles = (files: string[]): Pieza[] => {
+	return files.map((file) => {
+		const { name } = path.parse(file);
+		return {
+			name,
 			from: new RegExp(`/${name}`),
 			to: `/${name}.html`,
+			file,
 		};
 	});
 };
@@ -110,6 +129,7 @@ export {
 	getFiles,
 	getRoutes,
 	getEntries,
+	parseFiles,
 	getPlugins,
 	createCompiler,
 	createDevServer,

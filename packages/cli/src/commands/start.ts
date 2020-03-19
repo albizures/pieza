@@ -8,6 +8,7 @@ import {
 	createDevServer,
 	getMainFolder,
 	getRoutes,
+	parseFiles,
 } from '../utils';
 
 export default class Start extends Command {
@@ -29,8 +30,9 @@ export default class Start extends Command {
 	async run() {
 		const { flags } = this.parse(Start);
 		const files = await getFiles(getMainFolder());
-		const entry = await getEntries(files);
-		const plugins = await getPlugins(files);
+		const piezas = parseFiles(files);
+		const entry = await getEntries(piezas);
+		const plugins = await getPlugins(piezas);
 
 		const customPort = Number(flags.port);
 		const defaultPort = Number.isNaN(customPort) ? 4321 : customPort;
@@ -40,7 +42,7 @@ export default class Start extends Command {
 			plugins,
 		});
 
-		const routes = getRoutes(files);
+		const routes = getRoutes(piezas);
 		const server = createDevServer(compiler, routes);
 		const port = await getPort({ port: defaultPort });
 		const host = flags.host || 'localhost';
@@ -50,7 +52,13 @@ export default class Start extends Command {
 				throw error;
 			}
 
-			console.log(`Starting server on http://${host}:${port}`);
+			const baseUrl = `http://${host}:${port}`;
+
+			console.log('Sketches available:');
+			piezas.forEach((pieza) => {
+				const { name, to } = pieza;
+				console.log(`  ${name} -> ${baseUrl}/${name}`);
+			});
 		});
 	}
 }

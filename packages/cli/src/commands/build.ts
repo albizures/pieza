@@ -6,6 +6,7 @@ import {
 	getPlugins,
 	createCompiler,
 	getMainFolder,
+	parseFiles,
 } from '../utils';
 
 export default class Start extends Command {
@@ -23,8 +24,9 @@ export default class Start extends Command {
 		process.env.NODE_ENV = 'production';
 		const spinner = ora('Compiling...');
 		const files = await getFiles(getMainFolder());
-		const entry = await getEntries(files);
-		const plugins = await getPlugins(files);
+		const piezas = parseFiles(files);
+		const entry = await getEntries(piezas);
+		const plugins = await getPlugins(piezas);
 
 		const compiler = createCompiler({
 			mode: 'production',
