@@ -7,8 +7,8 @@ const defaultBabelConfig = {
 const defaultWebpackConfig: Configuration = {
 	output: {
 		publicPath: '/',
-		filename: '[name].js',
-		chunkFilename: '[name].js',
+		filename: '[name].[hash].js',
+		chunkFilename: '[name].[hash].js',
 	},
 	performance: { hints: false },
 	stats: 'none',
