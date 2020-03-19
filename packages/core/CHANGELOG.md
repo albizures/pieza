@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [0.2.1](https://github.com/albizures/pieza/compare/@pieza/core@0.2.0...@pieza/core@0.2.1) (2020-03-19)
+
+
+### Bug Fixes
+
+* **settings:** parse values from settings panel ([bb31281](https://github.com/albizures/pieza/commit/bb31281ccb99d3fe329daea7f05eac043bd53c72))
+
+
+
+
+
 # [0.2.0](https://github.com/albizures/pieza/compare/@pieza/core@0.1.1...@pieza/core@0.2.0) (2020-03-19)
 
 

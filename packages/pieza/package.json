@@ -1,6 +1,6 @@
 {
 	"name": "pieza",
-	"version": "0.1.2",
+	"version": "0.1.3",
 	"main": "dist/index.js",
 	"types": "dist/index.d.ts",
 	"author": "Jose Albizures",
@@ -17,6 +17,6 @@
 	],
 	"dependencies": {
 		"@pieza/cli": "^0.3.0",
-		"@pieza/core": "^0.2.0"
+		"@pieza/core": "^0.2.1"
 	}
 }

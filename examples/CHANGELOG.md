@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [1.2.3](https://github.com/albizures/pieza/compare/pieza-examples@1.2.2...pieza-examples@1.2.3) (2020-03-19)
+
+
+### Bug Fixes
+
+* **settings:** parse values from settings panel ([bb31281](https://github.com/albizures/pieza/commit/bb31281ccb99d3fe329daea7f05eac043bd53c72))
+
+
+
+
+
 ## [1.2.2](https://github.com/albizures/pieza/compare/pieza-examples@1.2.1...pieza-examples@1.2.2) (2020-03-19)
 
 **Note:** Version bump only for package pieza-examples
