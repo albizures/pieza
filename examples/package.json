@@ -11,10 +11,7 @@
 		"clean": "rm -rf node_modules",
 		"preinstall": "yarn clean"
 	},
-	"devDependencies": {
-		"@pieza/cli": "^0.1.0"
-	},
 	"dependencies": {
-		"@pieza/core": "^0.1.0"
+		"pieza": "^0.0.1"
 	}
 }

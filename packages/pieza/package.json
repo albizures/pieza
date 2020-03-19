@@ -1,0 +1,19 @@
+{
+	"name": "pieza",
+	"version": "0.0.1",
+	"main": "dist/index.js",
+	"types": "dist/index.d.ts",
+	"author": "Jose Albizures",
+	"license": "MIT",
+	"scripts": {
+		"clean": "rimraf dist && rimraf *.tsbuildinfo",
+		"prewatch": "yarn clean",
+		"watch": "tsc -w -p tsconfig.build.json ",
+		"prebuild": "yarn clean",
+		"build": "tsc -p tsconfig.build.json"
+	},
+	"dependencies": {
+		"@pieza/cli": "^0.1.0",
+		"@pieza/core": "^0.1.0"
+	}
+}
