@@ -1,4 +1,3 @@
-import { Vector } from 'p5';
 import { Setup, PiezaData, Size, PiezaSize } from '../types';
 import { useContext } from '../hooks';
 

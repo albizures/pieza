@@ -42,7 +42,6 @@ export default class Start extends Command {
 
 		const routes = getRoutes(files);
 		const server = createDevServer(compiler, routes);
-
 		const port = await getPort({ port: defaultPort });
 		const host = flags.host || 'localhost';
 

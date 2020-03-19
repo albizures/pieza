@@ -1,27 +1,16 @@
 import { Configuration } from 'webpack';
 
 const defaultBabelConfig = {
-	presets: [
-		[
-			'@babel/preset-env',
-			{
-				targets: {
-					browsers: ['last 2 versions'],
-				},
-			},
-		],
-		'@babel/preset-typescript',
-	],
+	presets: ['@babel/preset-typescript'],
 };
 
 const defaultWebpackConfig: Configuration = {
 	output: {
+		publicPath: '/',
 		filename: '[name].js',
 		chunkFilename: '[name].js',
 	},
-	optimization: {
-		usedExports: true,
-	},
+	performance: { hints: false },
 	stats: 'none',
 	mode: 'development',
 	module: {
@@ -29,26 +18,22 @@ const defaultWebpackConfig: Configuration = {
 			{
 				test: /\.ts$/,
 				exclude: /(node_modules)/,
-				use: {
-					loader: 'babel-loader',
-					options: defaultBabelConfig,
-				},
+				use: [
+					'cache-loader',
+					{
+						loader: 'babel-loader',
+						options: defaultBabelConfig,
+					},
+				],
 			},
 		],
 	},
 	resolve: {
+		alias: {
+			p5: require.resolve('p5/lib/p5.min.js'),
+		},
 		extensions: ['.js', '.ts'],
 	},
 };
-
-if (process.env.NODE_ENV === 'production') {
-	defaultWebpackConfig.mode = 'production';
-
-	if (defaultWebpackConfig.resolve) {
-		defaultWebpackConfig.resolve.alias = {
-			p5: require.resolve('p5/lib/p5.min.js'),
-		};
-	}
-}
 
 export { defaultBabelConfig, defaultWebpackConfig };

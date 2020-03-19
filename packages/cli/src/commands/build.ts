@@ -1,4 +1,3 @@
-process.env.NODE_ENV = 'production';
 import { Command, flags } from '@oclif/command';
 import ora from 'ora';
 import {
@@ -21,6 +20,7 @@ export default class Start extends Command {
 	static args = [];
 
 	async run() {
+		process.env.NODE_ENV = 'production';
 		const spinner = ora('Compiling...');
 		const files = await getFiles(getMainFolder());
 		const entry = await getEntries(files);

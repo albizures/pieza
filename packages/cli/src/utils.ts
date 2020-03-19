@@ -49,11 +49,12 @@ const getPiezaName = (file: string) => {
 };
 
 const getPlugins = async (files: string[]): Promise<HtmlWebpackPlugin[]> => {
+	const names = files.map((file) => path.parse(file).name);
 	return files.map((file) => {
 		const { name } = path.parse(file);
 
 		return new HtmlWebpackPlugin({
-			chunks: [name],
+			excludeChunks: names.filter((current) => current !== name),
 			xhtml: true,
 			title: getPiezaName(file) || name,
 			filename: `${name}.html`,
@@ -81,6 +82,8 @@ const createDevServer = (compiler: Compiler, rewrites: Rewrite[]) => {
 		logLevel: 'silent',
 	});
 	const config: ServerConfig = {
+		compress: false,
+
 		historyApiFallback: {
 			rewrites: rewrites,
 		},
