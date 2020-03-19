@@ -1,4 +1,5 @@
 import { Command, flags } from '@oclif/command';
+import ora from 'ora';
 import {
 	getEntries,
 	getFiles,
@@ -21,6 +22,7 @@ export default class Start extends Command {
 
 	async run() {
 		process.env.NODE_ENV = 'production';
+		const spinner = ora('Compiling...');
 		const files = await getFiles(getMainFolder());
 		const entry = await getEntries(files);
 		const plugins = await getPlugins(files);
@@ -31,7 +33,9 @@ export default class Start extends Command {
 			plugins,
 		});
 
+		spinner.start();
 		compiler.run((error, stats) => {
+			spinner.stop();
 			if (error || stats.hasErrors()) {
 				console.error(error || stats.toString());
 			} else {
