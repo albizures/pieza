@@ -31,7 +31,9 @@ const wrapEventHandlers = <T, S>(
 		if (handler) {
 			handlers[name] = wrapEventHandler(handler, data);
 		} else if (name === P5EventsNames.windowResized) {
-			handlers.windowResized = wrapEventHandler(windowResized, data);
+			if (data.draw) {
+				handlers.windowResized = wrapEventHandler(windowResized, data);
+			}
 		}
 	});
 };
