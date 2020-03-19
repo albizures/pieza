@@ -5,6 +5,6 @@ module.exports = {
 	setupFiles: [
 		'jest-canvas-mock',
 		'jest-localstorage-mock',
-		'<rootDir>/packages/core/test/setup.js',
+		'<rootDir>/packages/core/src/test/setup.js',
 	],
 };
