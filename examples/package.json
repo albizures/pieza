@@ -1,6 +1,6 @@
 {
 	"name": "pieza-examples",
-	"version": "1.2.3",
+	"version": "1.2.4",
 	"private": true,
 	"main": "index.js",
 	"author": "Jose Albizures <jose@albizures.com>",
@@ -12,6 +12,6 @@
 		"preinstall": "yarn clean"
 	},
 	"dependencies": {
-		"pieza": "^0.1.3"
+		"pieza": "^0.1.4"
 	}
 }
