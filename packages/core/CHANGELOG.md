@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [0.3.0](https://github.com/albizures/pieza/compare/@pieza/core@0.2.1...@pieza/core@0.3.0) (2020-03-20)
+
+
+### Features
+
+* **update:** support state partial update ([f95989c](https://github.com/albizures/pieza/commit/f95989cff893587497e76fa048ff43c375454ffc))
+
+
+
+
+
 ## [0.2.1](https://github.com/albizures/pieza/compare/@pieza/core@0.2.0...@pieza/core@0.2.1) (2020-03-19)
 
 

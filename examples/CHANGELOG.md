@@ -3,6 +3,14 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [1.2.6](https://github.com/albizures/pieza/compare/pieza-examples@1.2.5...pieza-examples@1.2.6) (2020-03-20)
+
+**Note:** Version bump only for package pieza-examples
+
+
+
+
+
 ## [1.2.5](https://github.com/albizures/pieza/compare/pieza-examples@1.2.4...pieza-examples@1.2.5) (2020-03-19)
 
 **Note:** Version bump only for package pieza-examples
