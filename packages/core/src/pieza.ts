@@ -79,7 +79,11 @@ const addDraw = <S>(data: PiezaData<S>, context: Context) => {
 
 	const updateState = () => {
 		if (typeof update === 'function') {
-			data.state = update(data.state);
+			const dataUpdate = update(data.state);
+
+			if (dataUpdate) {
+				Object.assign(data.state, dataUpdate);
+			}
 		}
 	};
 

@@ -10,7 +10,7 @@ export interface Size {
 export type Setup<S> = () => S;
 export type SettingsFactory<T> = (context: p5) => T;
 export type Draw = () => void;
-export type Update<S> = (state: S) => S;
+export type Update<S> = (state: S) => Partial<S>;
 
 export enum P5EventsNames {
 	keyPressed = 'keyPressed',
