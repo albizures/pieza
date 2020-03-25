@@ -1,0 +1,31 @@
+{
+	"name": "@pieza/electron",
+	"version": "1.0.0",
+	"main": "dist/index.js",
+	"author": "Jose Albizures <jose@albizures.com>",
+	"license": "MIT",
+	"files": [
+		"dist"
+	],
+	"scripts": {
+		"clean": "rm -rf dist && rimraf *.tsbuildinfo",
+		"prewatch": "yarn clean",
+		"watch": "tsc -w",
+		"prebuild": "yarn clean",
+		"build": "tsc",
+		"start": "electron ./dist/index.js"
+	},
+	"dependencies": {
+		"electron": "^8.1.1",
+		"electron-debug": "^3.0.1",
+		"execa": "^4.0.0"
+	},
+	"devDependencies": {
+		"@pieza/core": "*",
+		"@types/node": "12",
+		"typescript": "^3.8.3"
+	},
+	"peerDependencies": {
+		"@pieza/core": "^0.3.0"
+	}
+}
