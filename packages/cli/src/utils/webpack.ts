@@ -6,7 +6,7 @@ import webpack, { Configuration, Compiler } from 'webpack';
 import createLogger from 'webpack-dev-server/lib/utils/createLogger';
 import Server, { Configuration as ServerConfig } from 'webpack-dev-server';
 import { defaultWebpackConfig } from '../config';
-import { Pieza } from '../types';
+import { Pieza, OptionConfig, EnvType } from '../types';
 import { getPiezaName } from './files';
 
 const createDevServer = (
@@ -28,18 +28,10 @@ const createDevServer = (
 	return new Server(compiler, config, log);
 };
 
-const createCompiler = (customConfig: Configuration, electron = false) => {
-	const options: Configuration = Object.assign(
-		{},
-		defaultWebpackConfig,
-		customConfig,
-	);
+const createCompiler = (options: OptionConfig) => {
+	const config = createWebpackConfig(options);
 
-	if (electron) {
-		options.target = 'electron-renderer';
-	}
-
-	return webpack(options);
+	return webpack(config);
 };
 
 const getPlugins = async (piezas: Pieza[]): Promise<HtmlWebpackPlugin[]> => {
@@ -64,6 +56,42 @@ const getPlugins = async (piezas: Pieza[]): Promise<HtmlWebpackPlugin[]> => {
 			template: path.join(__dirname, '..', '..', 'template.html'),
 		});
 	});
+};
+
+const createWebpackConfig = (options: OptionConfig): Configuration => {
+	const {
+		envType = EnvType.Web,
+		production = false,
+		plugins = [],
+		entry,
+	} = options;
+
+	const config = {
+		...defaultWebpackConfig,
+		entry,
+	};
+
+	const definePluginConfig: Record<string, boolean> = {
+		__SERVER__: envType === EnvType.Server,
+	};
+
+	if (envType === EnvType.Electron) {
+		config.target = 'electron-renderer';
+		config.optimization = {
+			nodeEnv: 'electron',
+		};
+		config.entry['electron-page'] = require.resolve(
+			'@pieza/dev-window/dist/page',
+		);
+	}
+
+	if (production) {
+		config.mode = 'production';
+	}
+
+	config.plugins = plugins.concat(new webpack.DefinePlugin(definePluginConfig));
+
+	return config as Configuration;
 };
 
 export { createDevServer, createCompiler, getPlugins };

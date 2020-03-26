@@ -5,6 +5,7 @@ import { getEntries, getFiles, getRoutes, getPackage } from '../utils';
 import { getPlugins, createCompiler, createDevServer } from '../utils/webpack';
 import { parseFiles, getMainFolder } from '../utils/files';
 import { isYarnAvailable } from '../utils/env';
+import { EnvType } from '../types';
 
 export default class Start extends Command {
 	static description = 'run a server with live reload';
@@ -69,13 +70,11 @@ export default class Start extends Command {
 			entry['electron-page'] = require.resolve('@pieza/dev-window/dist/page');
 		}
 
-		const compiler = createCompiler(
-			{
-				entry,
-				plugins,
-			},
-			isElectron,
-		);
+		const compiler = createCompiler({
+			entry,
+			plugins,
+			envType: isElectron ? EnvType.Electron : EnvType.Web,
+		});
 
 		const routes = getRoutes(piezas);
 		const server = createDevServer(compiler, routes, flags.verbose);

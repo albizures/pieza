@@ -1,4 +1,4 @@
-import { Configuration } from 'webpack';
+import webpack, { Configuration } from 'webpack';
 
 process.env['ELECTRON_DISABLE_SECURITY_WARNINGS'] = 'true';
 
@@ -6,18 +6,17 @@ const defaultBabelConfig = {
 	presets: ['@babel/preset-typescript'],
 };
 
-const defaultWebpackConfig: Configuration = {
+const defaultWebpackConfig = {
 	output: {
 		publicPath: '/',
 		filename: '[name].[hash:8].js',
 		chunkFilename: '[id].c.[hash:8].js',
 	},
 	performance: { hints: false },
-	optimization: {
-		nodeEnv: 'electron',
-	},
-	stats: 'none',
+	optimization: {},
+	target: 'web',
 	mode: 'development',
+	stats: 'none',
 	devtool: false,
 	module: {
 		rules: [
@@ -34,6 +33,7 @@ const defaultWebpackConfig: Configuration = {
 			},
 		],
 	},
+	plugins: [] as unknown[],
 	resolve: {
 		alias: {
 			p5: require.resolve('p5/lib/p5.min.js'),

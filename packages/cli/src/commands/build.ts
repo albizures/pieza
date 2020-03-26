@@ -24,7 +24,7 @@ export default class Start extends Command {
 		const plugins = await getPlugins(piezas);
 
 		const compiler = createCompiler({
-			mode: 'production',
+			production: true,
 			entry,
 			plugins,
 		});
