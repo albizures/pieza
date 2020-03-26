@@ -7,9 +7,11 @@
 	"scripts": {
 		"clean": "rimraf dist && rimraf *.tsbuildinfo",
 		"prewatch": "yarn clean",
-		"watch": "tsc -w -p tsconfig.build.json ",
+		"watch": "run-p watch:*",
+		"watch:cjs": "tsc -w -p tsconfig.cjs.json",
+		"watch:module": "tsc -w -p tsconfig.build.json",
 		"prebuild": "yarn clean",
-		"build": "tsc -p tsconfig.build.json"
+		"build": "tsc -p tsconfig.build.json && tsc -p tsconfig.cjs.json"
 	},
 	"dependencies": {
 		"@types/dom-mediacapture-record": "^1.0.4",
@@ -25,5 +27,8 @@
 	},
 	"files": [
 		"dist"
-	]
+	],
+	"devDependencies": {
+		"npm-run-all": "^4.1.5"
+	}
 }
