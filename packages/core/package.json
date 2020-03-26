@@ -12,7 +12,7 @@
 		"build": "tsc -p tsconfig.build.json"
 	},
 	"dependencies": {
-		"@types/dom-mediacapture-record": "^1.0.3",
+		"@types/dom-mediacapture-record": "^1.0.4",
 		"@types/glob": "^7.1.1",
 		"@types/lodash.debounce": "^4.0.6",
 		"@types/p5": "^0.9.0",
