@@ -1,4 +1,5 @@
 import { Command, flags } from '@oclif/command';
+import execa from 'execa';
 import getPort from 'get-port';
 import {
 	getEntries,
@@ -9,6 +10,8 @@ import {
 	getMainFolder,
 	getRoutes,
 	parseFiles,
+	getPackage,
+	isYarnAvailable,
 } from '../utils';
 
 export default class Start extends Command {
@@ -18,7 +21,16 @@ export default class Start extends Command {
 
 	static flags = {
 		help: flags.help({ char: 'h' }),
+		verbose: flags.boolean({ char: 'v', description: 'default webpack ouput' }),
 		port: flags.string({ char: 'p', description: 'port', default: '4321' }),
+		record: flags.string({
+			char: 'r',
+			description: 'open an electron window to record the sketch',
+		}),
+		electron: flags.string({
+			char: 'e',
+			description: 'opens an electron window',
+		}),
 		host: flags.string({
 			description: 'host',
 			default: 'localhost',
@@ -37,13 +49,44 @@ export default class Start extends Command {
 		const customPort = Number(flags.port);
 		const defaultPort = Number.isNaN(customPort) ? 4321 : customPort;
 
-		const compiler = createCompiler({
-			entry,
-			plugins,
-		});
+		const isElectron = Boolean(flags.electron) || Boolean(flags.record);
+		const sketch = flags.record || flags.electron;
+
+		if (sketch && !entry[sketch]) {
+			console.error(`Invalid sketch name: ${sketch}`);
+			console.error(
+				`Sketches available: \n\t- ${Object.keys(entry).join('\n\t- ')}`,
+			);
+			throw new Error(`Invalid sketch name: ${sketch}`);
+		}
+
+		if (isElectron) {
+			const { devDependencies } = getPackage();
+
+			if (
+				typeof devDependencies !== 'object' ||
+				!Object.keys(devDependencies).includes('@pieza/electron')
+			) {
+				if (await isYarnAvailable()) {
+					await execa('yarn', ['add', '--dev', '@pieza/electron']);
+				} else {
+					await execa('npm', ['install', '-D', '@pieza/electron']);
+				}
+			}
+
+			entry['electron-page'] = require.resolve('@pieza/electron/dist/page');
+		}
+
+		const compiler = createCompiler(
+			{
+				entry,
+				plugins,
+			},
+			isElectron,
+		);
 
 		const routes = getRoutes(piezas);
-		const server = createDevServer(compiler, routes);
+		const server = createDevServer(compiler, routes, flags.verbose);
 		const port = await getPort({ port: defaultPort });
 		const host = flags.host || 'localhost';
 
@@ -60,5 +103,17 @@ export default class Start extends Command {
 				console.log(`  ${name} -> ${baseUrl}/${name}`);
 			});
 		});
+
+		if (isElectron) {
+			if (flags.record) {
+				process.env.PIEZA_RECORDING = 'true';
+			}
+
+			process.env.PIEZA_SKETCH = sketch;
+
+			await execa('electron', [require.resolve('@pieza/electron')]);
+
+			server.close();
+		}
 	}
 }

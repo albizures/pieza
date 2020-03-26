@@ -9,7 +9,7 @@
 		"test": "jest",
 		"bootstrap": "lerna bootstrap",
 		"clean": "lerna clean && lerna run clean",
-		"watch": "lerna run watch",
+		"watch": "lerna run watch --parallel",
 		"build": "lerna run build",
 		"prerelease": "yarn test && yarn build",
 		"release": "cross-env HUSKY_BYPASS=true lerna version --conventional-commits && lerna publish from-git"

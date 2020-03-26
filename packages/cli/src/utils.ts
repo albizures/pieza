@@ -1,4 +1,5 @@
 import glob from 'glob';
+import execa from 'execa';
 import fs from 'fs';
 import path from 'path';
 import Server, { Configuration as ServerConfig } from 'webpack-dev-server';
@@ -79,14 +80,27 @@ const getPlugins = async (piezas: Pieza[]): Promise<HtmlWebpackPlugin[]> => {
 	});
 };
 
-const createCompiler = (customConfig: Configuration) => {
-	const options = Object.assign({}, defaultWebpackConfig, customConfig);
+const createCompiler = (customConfig: Configuration, electron = false) => {
+	const options: Configuration = Object.assign(
+		{},
+		defaultWebpackConfig,
+		customConfig,
+	);
+
+	if (electron) {
+		options.target = 'electron-renderer';
+	}
+
 	return webpack(options);
 };
 
-const createDevServer = (compiler: Compiler, rewrites: Rewrite[]) => {
+const createDevServer = (
+	compiler: Compiler,
+	rewrites: Rewrite[],
+	verbose: boolean,
+) => {
 	const log = createLogger({
-		logLevel: 'silent',
+		...(verbose ? {} : { logLevel: 'silent' }),
 	});
 	const config: ServerConfig = {
 		compress: false,
@@ -125,13 +139,28 @@ const parseFiles = (files: string[]): Pieza[] => {
 	});
 };
 
+const getPackage = () => {
+	return require(`${appDirectory}/package.json`);
+};
+
+const isYarnAvailable = async () => {
+	try {
+		await execa('yarn', ['--version']);
+		return true;
+	} catch (e) {
+		return false;
+	}
+};
+
 export {
 	getFiles,
 	getRoutes,
+	getPackage,
 	getEntries,
 	parseFiles,
 	getPlugins,
 	createCompiler,
 	createDevServer,
+	isYarnAvailable,
 	getMainFolder,
 };

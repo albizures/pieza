@@ -1,5 +1,7 @@
 import { Configuration } from 'webpack';
 
+process.env['ELECTRON_DISABLE_SECURITY_WARNINGS'] = 'true';
+
 const defaultBabelConfig = {
 	presets: ['@babel/preset-typescript'],
 };
@@ -11,8 +13,12 @@ const defaultWebpackConfig: Configuration = {
 		chunkFilename: '[id].c.[hash:8].js',
 	},
 	performance: { hints: false },
+	optimization: {
+		nodeEnv: 'electron',
+	},
 	stats: 'none',
 	mode: 'development',
+	devtool: false,
 	module: {
 		rules: [
 			{
