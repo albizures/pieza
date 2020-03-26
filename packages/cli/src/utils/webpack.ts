@@ -61,7 +61,7 @@ const getPlugins = async (piezas: Pieza[]): Promise<HtmlWebpackPlugin[]> => {
 				useShortDoctype: true,
 				minifyCSS: true,
 			},
-			template: path.join(__dirname, '..', 'template.html'),
+			template: path.join(__dirname, '..', '..', 'template.html'),
 		});
 	});
 };
