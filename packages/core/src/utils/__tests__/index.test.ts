@@ -1,6 +1,6 @@
 import { clear, defaultSetup } from '../index';
 import { singleRun } from '../hooks';
-import { createData } from '../../test/utils';
+import { createData } from '../test/utils';
 
 test('clean', () => {
 	const data = createData({

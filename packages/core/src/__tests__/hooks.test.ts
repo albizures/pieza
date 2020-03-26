@@ -7,7 +7,7 @@ import {
 	useMutableState,
 } from '../hooks';
 import { singleRun } from '../utils/hooks';
-import { createContext, createData } from '../test/utils';
+import { createContext, createData } from '../utils/test/utils';
 
 test('useContext', () => {
 	const context = createContext();

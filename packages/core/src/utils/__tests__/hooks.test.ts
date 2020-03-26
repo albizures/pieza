@@ -6,7 +6,7 @@ import {
 	cleanCurrentData,
 	currentData,
 } from '../hooks';
-import { createData } from '../../test/utils';
+import { createData } from '../test/utils';
 
 test('setCurrentData', () => {
 	const data = createData();

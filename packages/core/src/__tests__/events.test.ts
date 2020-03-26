@@ -3,7 +3,7 @@ import {
 	wrapEventHandlers,
 	setEventHandlers,
 } from '../events';
-import { createContext, createData } from '../test/utils';
+import { createContext, createData } from '../utils/test/utils';
 import { getCurrentData, setCurrentData } from '../utils/hooks';
 
 test('setEventHandlers', () => {
