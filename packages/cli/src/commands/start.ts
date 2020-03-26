@@ -1,18 +1,10 @@
 import { Command, flags } from '@oclif/command';
 import execa from 'execa';
 import getPort from 'get-port';
-import {
-	getEntries,
-	getFiles,
-	getPlugins,
-	createCompiler,
-	createDevServer,
-	getMainFolder,
-	getRoutes,
-	parseFiles,
-	getPackage,
-	isYarnAvailable,
-} from '../utils';
+import { getEntries, getFiles, getRoutes, getPackage } from '../utils';
+import { getPlugins, createCompiler, createDevServer } from '../utils/webpack';
+import { parseFiles, getMainFolder } from '../utils/files';
+import { isYarnAvailable } from '../utils/env';
 
 export default class Start extends Command {
 	static description = 'run a server with live reload';

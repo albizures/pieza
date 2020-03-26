@@ -1,13 +1,8 @@
-import { Command, flags } from '@oclif/command';
 import ora from 'ora';
-import {
-	getEntries,
-	getFiles,
-	getPlugins,
-	createCompiler,
-	getMainFolder,
-	parseFiles,
-} from '../utils';
+import { Command, flags } from '@oclif/command';
+import { getEntries, getFiles } from '../utils';
+import { getPlugins, createCompiler } from '../utils/webpack';
+import { parseFiles, getMainFolder } from '../utils/files';
 
 export default class Start extends Command {
 	static description = 'build all';
