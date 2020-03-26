@@ -15,6 +15,6 @@
 		"pieza": "^0.1.6"
 	},
 	"devDependencies": {
-		"@pieza/electron": "*"
+		"@pieza/dev-window": "*"
 	}
 }

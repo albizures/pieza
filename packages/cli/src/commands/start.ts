@@ -65,16 +65,16 @@ export default class Start extends Command {
 
 			if (
 				typeof devDependencies !== 'object' ||
-				!Object.keys(devDependencies).includes('@pieza/electron')
+				!Object.keys(devDependencies).includes('@pieza/dev-window')
 			) {
 				if (await isYarnAvailable()) {
-					await execa('yarn', ['add', '--dev', '@pieza/electron']);
+					await execa('yarn', ['add', '--dev', '@pieza/dev-window']);
 				} else {
-					await execa('npm', ['install', '-D', '@pieza/electron']);
+					await execa('npm', ['install', '-D', '@pieza/dev-window']);
 				}
 			}
 
-			entry['electron-page'] = require.resolve('@pieza/electron/dist/page');
+			entry['electron-page'] = require.resolve('@pieza/dev-window/dist/page');
 		}
 
 		const compiler = createCompiler(
@@ -111,7 +111,7 @@ export default class Start extends Command {
 
 			process.env.PIEZA_SKETCH = sketch;
 
-			await execa('electron', [require.resolve('@pieza/electron')]);
+			await execa('electron', [require.resolve('@pieza/dev-window')]);
 
 			server.close();
 		}
