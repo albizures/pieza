@@ -12,6 +12,7 @@ import { run } from './utils/hooks';
 import { wrapEventHandlers, setEventHandlers } from './events';
 
 export interface Pieza {
+	name: string;
 	attach: (parent: HTMLElement) => Promise<void>;
 	updateSetting: (settingName: string, value: any) => void;
 }
@@ -196,6 +197,7 @@ const create = <T extends object = {}, S = void>(config: PiezaConfig<T, S>) => {
 	};
 
 	const pieza = {
+		name,
 		attach: async (parent: HTMLElement) => {
 			const { default: p5 } = await import('p5');
 			new p5((context: Context) => setupPieza(context), parent);

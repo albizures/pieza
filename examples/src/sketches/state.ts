@@ -1,4 +1,3 @@
-// @pieza-name: Using state
 import { create, useContext, useMutableState, useState } from 'pieza';
 
 interface State {

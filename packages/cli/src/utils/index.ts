@@ -1,7 +1,7 @@
 import glob from 'glob';
 import path from 'path';
 import { Rewrite } from 'connect-history-api-fallback';
-import { getProjectFolder } from './files';
+import { projectPath } from '../config';
 import { Pieza } from '../types';
 
 const getFiles = (root: string): Promise<string[]> =>
@@ -17,9 +17,9 @@ const getFiles = (root: string): Promise<string[]> =>
 
 const getEntries = async (piezas: Pieza[]): Promise<Record<string, string>> => {
 	return piezas.reduce((entries, pieza) => {
-		const { name, file } = pieza;
+		const { id, file } = pieza;
 
-		entries[name] = file;
+		entries[id] = file;
 
 		return entries;
 	}, {} as Record<string, string>);
@@ -36,7 +36,7 @@ const getRoutes = (piezas: Pieza[]): Rewrite[] => {
 };
 
 const getPackage = () => {
-	return require(`${getProjectFolder()}/package.json`);
+	return require(`${projectPath}/package.json`);
 };
 
 export { getFiles, getRoutes, getPackage, getEntries };

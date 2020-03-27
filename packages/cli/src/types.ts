@@ -1,7 +1,11 @@
 import { Plugin, Entry } from 'webpack';
 
-export interface Pieza {
+export interface SketchData {
 	name: string;
+}
+
+export interface Pieza {
+	id: string;
 	from: RegExp;
 	to: string;
 	file: string;
@@ -14,6 +18,7 @@ export enum EnvType {
 }
 
 export interface OptionConfig {
+	buildPath?: string;
 	envType?: EnvType;
 	production?: boolean;
 	plugins?: Plugin[];

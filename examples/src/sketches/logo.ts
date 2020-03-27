@@ -1,4 +1,3 @@
-// @pieza-name: Pieza logo
 import p5, { Vector } from 'p5';
 import {
 	create,

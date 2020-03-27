@@ -1,4 +1,3 @@
-// @pieza-name: Using the settings
 import {
 	create,
 	useContext,

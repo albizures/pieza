@@ -8,7 +8,6 @@ const getImage = async (canvas: HTMLCanvasElement): Promise<Buffer> => {
 	const data = canvas.toDataURL('image/jpeg');
 
 	const image = nativeImage.createFromDataURL(data);
-	console.log(image);
 
 	const jpeg = image.toJPEG(100);
 

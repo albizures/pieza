@@ -6,8 +6,7 @@ import webpack, { Configuration, Compiler } from 'webpack';
 import createLogger from 'webpack-dev-server/lib/utils/createLogger';
 import Server, { Configuration as ServerConfig } from 'webpack-dev-server';
 import { defaultWebpackConfig } from '../config';
-import { Pieza, OptionConfig, EnvType } from '../types';
-import { getPiezaName } from './files';
+import { Pieza, OptionConfig, EnvType, SketchData } from '../types';
 
 const createDevServer = (
 	compiler: Compiler,
@@ -34,15 +33,19 @@ const createCompiler = (options: OptionConfig) => {
 	return webpack(config);
 };
 
-const getPlugins = async (piezas: Pieza[]): Promise<HtmlWebpackPlugin[]> => {
-	const names = piezas.map((pieza) => pieza.name);
+const getPlugins = async (
+	piezas: Pieza[],
+	sketchesData: Record<string, SketchData>,
+): Promise<HtmlWebpackPlugin[]> => {
+	const names = piezas.map((pieza) => pieza.id);
 	return piezas.map((pieza) => {
-		const { name, file } = pieza;
+		const { id, file } = pieza;
+		const { name } = sketchesData[id];
 
 		return new HtmlWebpackPlugin({
 			excludeChunks: names.filter((current) => current !== name),
 			xhtml: true,
-			title: getPiezaName(file) || name,
+			title: name,
 			filename: `${name}.html`,
 			minify: process.env.NODE_ENV === 'production' && {
 				collapseWhitespace: true,
@@ -64,16 +67,18 @@ const createWebpackConfig = (options: OptionConfig): Configuration => {
 		production = false,
 		plugins = [],
 		entry,
+		buildPath,
 	} = options;
 
 	const config = {
 		...defaultWebpackConfig,
+		output: {
+			...defaultWebpackConfig.output,
+		},
 		entry,
 	};
 
-	const definePluginConfig: Record<string, boolean> = {
-		__SERVER__: envType === EnvType.Server,
-	};
+	const definePluginConfig: Record<string, boolean> = {};
 
 	if (envType === EnvType.Electron) {
 		config.target = 'electron-renderer';
@@ -83,6 +88,15 @@ const createWebpackConfig = (options: OptionConfig): Configuration => {
 		config.entry['electron-page'] = require.resolve(
 			'@pieza/dev-window/dist/page',
 		);
+	} else if (envType === EnvType.Server) {
+		config.target = 'node';
+		config.output.filename = '[name].js';
+		config.output.libraryTarget = 'commonjs2';
+		definePluginConfig.__SERVER__ = envType === EnvType.Server;
+	}
+
+	if (buildPath) {
+		config.output.path = buildPath;
 	}
 
 	if (production) {
@@ -94,4 +108,15 @@ const createWebpackConfig = (options: OptionConfig): Configuration => {
 	return config as Configuration;
 };
 
-export { createDevServer, createCompiler, getPlugins };
+const compile = (compiler: Compiler) =>
+	new Promise((resolve, reject) => {
+		compiler.run((error, stats) => {
+			if (error) {
+				reject(error);
+			} else {
+				resolve(stats);
+			}
+		});
+	});
+
+export { createDevServer, createCompiler, getPlugins, compile };

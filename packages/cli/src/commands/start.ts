@@ -1,9 +1,15 @@
 import { Command, flags } from '@oclif/command';
 import execa from 'execa';
 import getPort from 'get-port';
+import { defaultBuildPath } from '../config';
 import { getEntries, getFiles, getRoutes, getPackage } from '../utils';
 import { getPlugins, createCompiler, createDevServer } from '../utils/webpack';
-import { parseFiles, getMainFolder } from '../utils/files';
+import {
+	parseFiles,
+	getMainFolder,
+	clean,
+	getSketchesData,
+} from '../utils/files';
 import { isYarnAvailable } from '../utils/env';
 import { EnvType } from '../types';
 
@@ -34,10 +40,14 @@ export default class Start extends Command {
 
 	async run() {
 		const { flags } = this.parse(Start);
+
+		clean(defaultBuildPath);
+
 		const files = await getFiles(getMainFolder());
 		const piezas = parseFiles(files);
 		const entry = await getEntries(piezas);
-		const plugins = await getPlugins(piezas);
+		const data = await getSketchesData(entry);
+		const plugins = await getPlugins(piezas, data);
 
 		const customPort = Number(flags.port);
 		const defaultPort = Number.isNaN(customPort) ? 4321 : customPort;
@@ -90,8 +100,8 @@ export default class Start extends Command {
 
 			console.log('Sketches available:');
 			piezas.forEach((pieza) => {
-				const { name, to } = pieza;
-				console.log(`  ${name} -> ${baseUrl}/${name}`);
+				const { id, to } = pieza;
+				console.log(`  ${id} -> ${baseUrl}/${id}`);
 			});
 		});
 

@@ -1,4 +1,10 @@
-import webpack, { Configuration } from 'webpack';
+import fs from 'fs';
+import path from 'path';
+
+const projectPath = fs.realpathSync(process.cwd());
+const defaultBuildPath = path.join(projectPath, 'dist');
+const cachePath = path.join(projectPath, 'node_modules', '.cache', 'pieza');
+const sketchesPath = path.join(projectPath, 'src/sketches');
 
 process.env['ELECTRON_DISABLE_SECURITY_WARNINGS'] = 'true';
 
@@ -11,6 +17,8 @@ const defaultWebpackConfig = {
 		publicPath: '/',
 		filename: '[name].[hash:8].js',
 		chunkFilename: '[id].c.[hash:8].js',
+		path: defaultBuildPath,
+		libraryTarget: undefined as string | undefined,
 	},
 	performance: { hints: false },
 	optimization: {},
@@ -42,4 +50,11 @@ const defaultWebpackConfig = {
 	},
 };
 
-export { defaultBabelConfig, defaultWebpackConfig };
+export {
+	defaultBabelConfig,
+	defaultWebpackConfig,
+	projectPath,
+	defaultBuildPath,
+	cachePath,
+	sketchesPath,
+};

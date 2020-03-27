@@ -1,4 +1,3 @@
-// @pieza-name: Pieza examples
 import { create, useContext, useMeasures } from 'pieza';
 import { drawLine } from '../utils';
 
