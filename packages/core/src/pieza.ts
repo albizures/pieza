@@ -121,7 +121,7 @@ const create = <T extends object = {}, S = void>(config: PiezaConfig<T, S>) => {
 		settings,
 		draw,
 		update,
-		settingsPanel = true,
+		settingsPanel = !__ELECTRON__,
 		state: defaultState = {} as S,
 	} = config;
 

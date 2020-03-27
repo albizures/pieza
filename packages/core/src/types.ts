@@ -7,6 +7,10 @@ export interface Size {
 	height: number;
 }
 
+declare global {
+	const __ELECTRON__: boolean;
+}
+
 export type Setup<S> = () => S;
 export type SettingsFactory<T> = (context: p5) => T;
 export type Draw = () => void;

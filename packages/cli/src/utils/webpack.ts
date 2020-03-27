@@ -78,7 +78,10 @@ const createWebpackConfig = (options: OptionConfig): Configuration => {
 		entry,
 	};
 
-	const definePluginConfig: Record<string, boolean> = {};
+	const definePluginConfig = {
+		__SERVER__: false,
+		__ELECTRON__: false,
+	};
 
 	if (envType === EnvType.Electron) {
 		config.target = 'electron-renderer';
@@ -88,11 +91,12 @@ const createWebpackConfig = (options: OptionConfig): Configuration => {
 		config.entry['electron-page'] = require.resolve(
 			'@pieza/dev-window/dist/page',
 		);
+		definePluginConfig.__ELECTRON__ = true;
 	} else if (envType === EnvType.Server) {
 		config.target = 'node';
 		config.output.filename = '[name].js';
 		config.output.libraryTarget = 'commonjs2';
-		definePluginConfig.__SERVER__ = envType === EnvType.Server;
+		definePluginConfig.__SERVER__ = true;
 	}
 
 	if (buildPath) {
