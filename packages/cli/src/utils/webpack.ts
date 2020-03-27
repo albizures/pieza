@@ -39,14 +39,14 @@ const getPlugins = async (
 ): Promise<HtmlWebpackPlugin[]> => {
 	const names = piezas.map((pieza) => pieza.id);
 	return piezas.map((pieza) => {
-		const { id, file } = pieza;
+		const { id } = pieza;
 		const { name } = sketchesData[id];
 
 		return new HtmlWebpackPlugin({
-			excludeChunks: names.filter((current) => current !== name),
+			excludeChunks: names.filter((current) => current !== id),
 			xhtml: true,
 			title: name,
-			filename: `${name}.html`,
+			filename: `${id}.html`,
 			minify: process.env.NODE_ENV === 'production' && {
 				collapseWhitespace: true,
 				removeComments: true,
