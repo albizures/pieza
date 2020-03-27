@@ -2,7 +2,13 @@ import { Command, flags } from '@oclif/command';
 import execa from 'execa';
 import getPort from 'get-port';
 import { defaultBuildPath } from '../config';
-import { getEntries, getFiles, getRoutes, getPackage } from '../utils';
+import {
+	getEntries,
+	getFiles,
+	getRoutes,
+	getPackage,
+	isValidSketch,
+} from '../utils';
 import { getPlugins, createCompiler, createDevServer } from '../utils/webpack';
 import {
 	parseFiles,
@@ -40,28 +46,36 @@ export default class Start extends Command {
 
 	async run() {
 		const { flags } = this.parse(Start);
-
-		clean(defaultBuildPath);
-
-		const files = await getFiles(getMainFolder());
-		const piezas = parseFiles(files);
-		const entry = await getEntries(piezas);
-		const data = await getSketchesData(entry);
-		const plugins = await getPlugins(piezas, data);
-
 		const customPort = Number(flags.port);
 		const defaultPort = Number.isNaN(customPort) ? 4321 : customPort;
 
 		const isElectron = Boolean(flags.electron) || Boolean(flags.record);
-		const sketch = flags.record || flags.electron;
+		const sketchName = flags.record || flags.electron;
 
-		if (sketch && !entry[sketch]) {
-			console.error(`Invalid sketch name: ${sketch}`);
-			console.error(
-				`Sketches available: \n\t- ${Object.keys(entry).join('\n\t- ')}`,
-			);
-			throw new Error(`Invalid sketch name: ${sketch}`);
+		clean(defaultBuildPath);
+
+		const files = await getFiles(getMainFolder());
+		let sketches = parseFiles(files);
+
+		if (sketchName) {
+			if (!isValidSketch(sketches, sketchName)) {
+				console.error(`Invalid sketch name: ${sketchName}`);
+				console.error(`Sketches available:`);
+				sketches.forEach((sketch) => {
+					console.error(`\t- ${sketch.id}`);
+				});
+
+				throw new Error(`Invalid sketch name: ${sketchName}`);
+			} else {
+				sketches = sketches.filter((sketch) => {
+					return sketch.id === sketchName;
+				});
+			}
 		}
+
+		const entry = await getEntries(sketches);
+		const data = await getSketchesData(entry);
+		const plugins = await getPlugins(sketches, data);
 
 		if (isElectron) {
 			const { devDependencies } = getPackage();
@@ -86,7 +100,7 @@ export default class Start extends Command {
 			envType: isElectron ? EnvType.Electron : EnvType.Web,
 		});
 
-		const routes = getRoutes(piezas);
+		const routes = getRoutes(sketches);
 		const server = createDevServer(compiler, routes, flags.verbose);
 		const port = await getPort({ port: defaultPort });
 		const host = flags.host || 'localhost';
@@ -99,8 +113,8 @@ export default class Start extends Command {
 			const baseUrl = `http://${host}:${port}`;
 
 			console.log('Sketches available:');
-			piezas.forEach((pieza) => {
-				const { id, to } = pieza;
+			sketches.forEach((sketch) => {
+				const { id, to } = sketch;
 				console.log(`  ${id} -> ${baseUrl}/${id}`);
 			});
 		});
@@ -110,7 +124,7 @@ export default class Start extends Command {
 				process.env.PIEZA_RECORDING = 'true';
 			}
 
-			process.env.PIEZA_SKETCH = sketch;
+			process.env.PIEZA_SKETCH = sketchName;
 
 			await execa('electron', [require.resolve('@pieza/dev-window')]);
 

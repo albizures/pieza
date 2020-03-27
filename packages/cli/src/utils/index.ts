@@ -39,4 +39,8 @@ const getPackage = () => {
 	return require(`${projectPath}/package.json`);
 };
 
-export { getFiles, getRoutes, getPackage, getEntries };
+const isValidSketch = (sketches: Pieza[], sketchName?: string) => {
+	return sketchName && sketches.some((sketch) => sketch.id === sketchName);
+};
+
+export { getFiles, getRoutes, getPackage, getEntries, isValidSketch };
