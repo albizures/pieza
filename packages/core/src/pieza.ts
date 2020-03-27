@@ -23,12 +23,10 @@ const piezasData = new Map<string, PiezaData<any>>();
 export type Piezas = typeof piezas;
 export type PiezasData = typeof piezasData;
 
-const defaultSize: PiezaSize = isClient
-	? {
-			height: window.innerHeight,
-			width: window.innerWidth,
-	  }
-	: 360;
+const defaultSize: PiezaSize = {
+	height: 600,
+	width: 600,
+};
 
 const addSettings = <T extends object, S>(
 	data: PiezaData<S>,

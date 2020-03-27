@@ -1,6 +1,7 @@
 import p5 from 'p5';
-import { useContext } from './hooks';
+import { useContext, useMeasures } from './hooks';
 import { singleRun } from './utils/hooks';
+import { scaleSketch } from './utils';
 import {
 	P5EventHandler,
 	PiezaData,
@@ -9,8 +10,14 @@ import {
 } from './types';
 
 const windowResized = () => {
+	scaleSketch();
+};
+
+const windowSetupResized = () => {
 	const context = useContext();
-	context.resizeCanvas(context.windowWidth, context.windowHeight);
+	// scaleSketch();
+
+	context.setup();
 };
 
 const wrapEventHandler = <S>(fn: P5EventHandler, data: PiezaData<S>) => {
@@ -33,6 +40,8 @@ const wrapEventHandlers = <T, S>(
 		} else if (name === P5EventsNames.windowResized) {
 			if (data.draw) {
 				handlers.windowResized = wrapEventHandler(windowResized, data);
+			} else {
+				handlers.windowResized = wrapEventHandler(windowSetupResized, data);
 			}
 		}
 	});
