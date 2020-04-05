@@ -3,6 +3,20 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [0.3.1-alpha.0](https://github.com/albizures/pieza/compare/@pieza/core@0.3.0...@pieza/core@0.3.1-alpha.0) (2020-04-05)
+
+
+### Features
+
+* **cli:** support server side sketch data extraction ([f3f8522](https://github.com/albizures/pieza/commit/f3f852294a28b55bd40482ef790c79e2171f7e39))
+* **resize:** change how the resize works ([94e3edd](https://github.com/albizures/pieza/commit/94e3edd7618ecb81f41f7bf7001290aa143172d0))
+* **resize:** support resize function ([20f4083](https://github.com/albizures/pieza/commit/20f4083c82117f17e343c81b4fc0bb0916e5361d))
+* **settings:** disable settings panel inside of dev-window ([20c5b72](https://github.com/albizures/pieza/commit/20c5b72cb78b86972ed5baa77729c61786d29b8c))
+
+
+
+
+
 # [0.3.0](https://github.com/albizures/pieza/compare/@pieza/core@0.2.1...@pieza/core@0.3.0) (2020-03-20)
 
 

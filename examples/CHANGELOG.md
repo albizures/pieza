@@ -3,6 +3,19 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [1.2.7-alpha.0](https://github.com/albizures/pieza/compare/pieza-examples@1.2.6...pieza-examples@1.2.7-alpha.0) (2020-04-05)
+
+
+### Features
+
+* **cli:** install dev window when is needed ([f11d72a](https://github.com/albizures/pieza/commit/f11d72a7823163d4ef6e6bd400382ee09b5dacb8))
+* **cli:** support server side sketch data extraction ([f3f8522](https://github.com/albizures/pieza/commit/f3f852294a28b55bd40482ef790c79e2171f7e39))
+* **devWindow:** rename @pieza/electron to @pieza/dev-window ([6bf9b2a](https://github.com/albizures/pieza/commit/6bf9b2a2842d9449a61d37fb0b293e71de8a7ce8))
+
+
+
+
+
 ## [1.2.6](https://github.com/albizures/pieza/compare/pieza-examples@1.2.5...pieza-examples@1.2.6) (2020-03-20)
 
 **Note:** Version bump only for package pieza-examples
