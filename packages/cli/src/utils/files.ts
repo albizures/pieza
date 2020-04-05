@@ -11,6 +11,7 @@ const getMainFolder = () => {
 
 const getSketchesData = async (
 	entry: Record<string, string>,
+	sketches: Pieza[],
 ): Promise<Record<string, SketchData>> => {
 	const compiler = createCompiler({
 		entry,
@@ -21,17 +22,26 @@ const getSketchesData = async (
 	await compile(compiler);
 
 	return Object.keys(entry).reduce((result, id) => {
-		result[id] = getSketchData(id);
+		const sketch = sketches.find((sketch) => sketch.id === id);
+
+		if (!sketch) {
+			throw new Error(`invalid id: ${id}`);
+		}
+
+		result[id] = getSketchData(id, sketch);
 		return result;
 	}, {} as Record<string, SketchData>);
 };
 
-const getSketchData = (id: string): SketchData => {
-	const { name } = require(path.join(cachePath, `${id}.js`))
+const getSketchData = (id: string, sketch: Pieza): SketchData => {
+	const { name, width, height } = require(path.join(cachePath, `${id}.js`))
 		.default as PiezaData;
 
 	return {
+		url: sketch.to,
 		name,
+		width,
+		height,
 	};
 };
 

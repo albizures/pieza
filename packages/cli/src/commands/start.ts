@@ -22,7 +22,7 @@ import { EnvType } from '../types';
 export default class Start extends Command {
 	static description = 'run a server with live reload';
 
-	static examples = [`$ pieza start`];
+	static examples = ['$ pieza start', '$ pieza start -w [name]'];
 
 	static flags = {
 		help: flags.help({ char: 'h' }),
@@ -32,8 +32,8 @@ export default class Start extends Command {
 			char: 'r',
 			description: 'open an electron window to record the sketch',
 		}),
-		electron: flags.string({
-			char: 'e',
+		window: flags.string({
+			char: 'w',
 			description: 'opens an electron window',
 		}),
 		host: flags.string({
@@ -49,8 +49,8 @@ export default class Start extends Command {
 		const customPort = Number(flags.port);
 		const defaultPort = Number.isNaN(customPort) ? 4321 : customPort;
 
-		const isElectron = Boolean(flags.electron) || Boolean(flags.record);
-		const sketchName = flags.record || flags.electron;
+		const isWindow = Boolean(flags.window) || Boolean(flags.record);
+		const sketchName = flags.record || flags.window;
 
 		clean(defaultBuildPath);
 
@@ -74,10 +74,10 @@ export default class Start extends Command {
 		}
 
 		const entry = await getEntries(sketches);
-		const data = await getSketchesData(entry);
-		const plugins = await getPlugins(sketches, data);
+		const sketchesData = await getSketchesData(entry, sketches);
+		const plugins = await getPlugins(sketches, sketchesData);
 
-		if (isElectron) {
+		if (isWindow) {
 			const { devDependencies } = getPackage();
 
 			if (
@@ -97,7 +97,7 @@ export default class Start extends Command {
 		const compiler = createCompiler({
 			entry,
 			plugins,
-			envType: isElectron ? EnvType.Electron : EnvType.Web,
+			envType: isWindow ? EnvType.Electron : EnvType.Web,
 		});
 
 		const routes = getRoutes(sketches);
@@ -119,12 +119,17 @@ export default class Start extends Command {
 			});
 		});
 
-		if (isElectron) {
+		if (isWindow && sketchName) {
 			if (flags.record) {
 				process.env.PIEZA_RECORDING = 'true';
 			}
 
-			process.env.PIEZA_SKETCH = sketchName;
+			const data = sketchesData[sketchName];
+
+			process.env.PIEZA_URL = data.url;
+			process.env.PIEZA_SKETCH = data.name;
+			process.env.PIEZA_WIDTH = String(data.width);
+			process.env.PIEZA_HEIGHT = String(data.height);
 
 			await execa('electron', [require.resolve('@pieza/dev-window')]);
 
