@@ -1,4 +1,4 @@
-import p5, { Vector } from 'p5';
+import { Vector } from 'p5';
 import {
 	create,
 	useContext,
@@ -33,22 +33,21 @@ export default create<Settings>({
 		const { centerX, centerY } = useMeasures();
 		const deltaAngle = 360 / numberOfPieces;
 
+		context.strokeWeight(4);
 		context.translate(centerX, centerY);
 		context.angleMode(context.DEGREES);
 		context.noFill();
 
-		// context.rotate(90 - deltaAngle);
+		context.rotate(90 - deltaAngle);
 
 		context.push();
 
-		const a = 2; // Math.floor(context.random(4));
+		const randomPiece = Math.floor(context.random(4));
 		for (let index = 0; index < numberOfPieces; index++) {
 			context.rotate(deltaAngle);
 			context.push();
 
-			// console.log(a);
-
-			if (a === index) {
+			if (randomPiece === index) {
 				context.translate(0, 50);
 			}
 			drawPiece(context.createVector(0, 0), deltaAngle);
@@ -62,7 +61,7 @@ export default create<Settings>({
 			label: 'Number of Pieces',
 		}),
 		pieceSize: NumberValue({
-			value: 100,
+			value: 250,
 			label: 'Piece Size',
 		}),
 	},
