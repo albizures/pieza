@@ -20,9 +20,16 @@ test('defaultSetup', () => {
 	const data = createData({
 		context: {
 			strokeWeight: jest.fn(),
+			canvas: document.createElement('canvas'),
+		},
+		measures: {
+			width: 10,
+			height: 10,
 		},
 	});
 	singleRun(() => {
+		// console.log('HAHAHAHAHAH');
+
 		defaultSetup();
 	}, data);
 

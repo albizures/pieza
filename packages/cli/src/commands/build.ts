@@ -27,11 +27,11 @@ export default class Start extends Command {
 
 		clean(defaultBuildPath);
 		const files = await getFiles(getMainFolder());
-		const piezas = parseFiles(files);
-		const entry = await getEntries(piezas);
-		const data = await getSketchesData(entry);
+		const sketches = parseFiles(files);
+		const entry = await getEntries(sketches);
+		const sketchesData = await getSketchesData(entry, sketches);
 
-		const plugins = await getPlugins(piezas, data);
+		const plugins = await getPlugins(sketches, sketchesData);
 
 		spinner.start();
 
