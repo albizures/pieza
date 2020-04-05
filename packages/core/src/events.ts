@@ -1,5 +1,5 @@
 import p5 from 'p5';
-import { useContext, useMeasures } from './hooks';
+import { useContext } from './hooks';
 import { singleRun } from './utils/hooks';
 import { scaleSketch } from './utils';
 import {
@@ -38,10 +38,12 @@ const wrapEventHandlers = <T, S>(
 		if (handler) {
 			handlers[name] = wrapEventHandler(handler, data);
 		} else if (name === P5EventsNames.windowResized) {
-			if (data.draw) {
-				handlers.windowResized = wrapEventHandler(windowResized, data);
-			} else {
-				handlers.windowResized = wrapEventHandler(windowSetupResized, data);
+			if (!__ELECTRON__) {
+				if (data.draw) {
+					handlers.windowResized = wrapEventHandler(windowResized, data);
+				} else {
+					handlers.windowResized = wrapEventHandler(windowSetupResized, data);
+				}
 			}
 		}
 	});

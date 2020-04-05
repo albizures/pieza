@@ -6,13 +6,25 @@ import {
 	ConfigSettings,
 } from './types';
 import { getSettings } from './settings';
-import { clear, isClient, defaultSetup, runSetup, parseSize } from './utils';
+import {
+	clear,
+	isClient,
+	defaultSetup,
+	runSetup,
+	parseSize,
+	resizeSketch,
+	scaleSketch,
+} from './utils';
 import { setLocalSetting } from './localSettings';
-import { run } from './utils/hooks';
+import { run, singleRun } from './utils/hooks';
 import { wrapEventHandlers, setEventHandlers } from './events';
+import { useContext } from './hooks';
 
 export interface Pieza {
 	name: string;
+	width: number;
+	height: number;
+	resize: () => void;
 	attach: (parent: HTMLElement) => Promise<void>;
 	updateSetting: (settingName: string, value: any) => void;
 }
@@ -110,7 +122,9 @@ const updateSettingFactory = <S, T extends object>(data: PiezaData<S, T>) => (
 	run([clear, defaultSetup, runSetup(setup, data), draw], data);
 };
 
-const create = <T extends object = {}, S = void>(config: PiezaConfig<T, S>) => {
+const create = <T extends object = {}, S = void>(
+	config: PiezaConfig<T, S>,
+): Pieza => {
 	const {
 		setup,
 		type,
@@ -125,19 +139,21 @@ const create = <T extends object = {}, S = void>(config: PiezaConfig<T, S>) => {
 		state: defaultState = {} as S,
 	} = config;
 
-	if (!isClient) {
-		return {
-			attach: () => console.warn('not available in the server'),
-			updateSetting: () => console.warn('not available in the server'),
-			name,
-		};
-	}
-
 	if (piezas.has(name)) {
 		throw new Error(`Name already used: '${name}'`);
 	}
 
 	const size = parseSize(rawSize);
+
+	if (!isClient) {
+		return {
+			...size,
+			resize() {},
+			attach: async () => console.warn('not available in the server'),
+			updateSetting: async () => console.warn('not available in the server'),
+			name,
+		};
+	}
 
 	let context: Context;
 	const data: PiezaData<S, {}> = {
@@ -195,7 +211,13 @@ const create = <T extends object = {}, S = void>(config: PiezaConfig<T, S>) => {
 	};
 
 	const pieza = {
+		...size,
 		name,
+		resize() {
+			singleRun(() => {
+				scaleSketch();
+			}, data);
+		},
 		attach: async (parent: HTMLElement) => {
 			const { default: p5 } = await import('p5');
 			new p5((context: Context) => setupPieza(context), parent);
@@ -213,6 +235,10 @@ const create = <T extends object = {}, S = void>(config: PiezaConfig<T, S>) => {
 };
 
 const WEBGL = 'webgl';
+
+if (__ELECTRON__) {
+	(window as any).piezas = piezas;
+}
 
 export {
 	run,
