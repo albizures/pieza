@@ -1,26 +1,34 @@
-import { app, BrowserWindow } from 'electron';
+import { app, BrowserWindow, screen } from 'electron';
 import debug from 'electron-debug';
+import { getSize } from './utils';
 
 debug({
 	showDevTools: false,
 });
 
-const sketch = process.env.PIEZA_SKETCH;
+const url = process.env.PIEZA_URL;
 
 const createWindow = async () => {
 	await app.whenReady();
+	const { width, height } = getSize(300);
+	const [mainScreen] = screen.getAllDisplays();
+	const x = mainScreen.size.width - width - 20;
+	const y = mainScreen.size.height - height - 20;
 
 	let win = new BrowserWindow({
-		width: 800,
-		height: 600,
+		width,
+		height,
+		x,
+		y,
 		webPreferences: {
 			nodeIntegration: true,
 		},
+		frame: false,
 	});
 
 	win.setAlwaysOnTop(true, 'floating');
 
-	win.loadURL(`http://localhost:4321/${sketch}`);
+	win.loadURL(`http://localhost:4321${url}`);
 };
 
 createWindow();
