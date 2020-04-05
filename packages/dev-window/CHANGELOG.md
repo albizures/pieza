@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [0.0.2-alpha.1](https://github.com/albizures/pieza/compare/@pieza/dev-window@0.0.2-alpha.0...@pieza/dev-window@0.0.2-alpha.1) (2020-04-05)
+
+
+### Features
+
+* **recording:** use space to start and stop recording ([f8e2f36](https://github.com/albizures/pieza/commit/f8e2f364dbacaafa5cf4fe4aef6d1f545cf4a631))
+
+
+
+
+
 ## 0.0.2-alpha.0 (2020-04-05)
 
 

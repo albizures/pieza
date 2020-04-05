@@ -1,6 +1,6 @@
 {
 	"name": "@pieza/dev-window",
-	"version": "0.0.2-alpha.0",
+	"version": "0.0.2-alpha.1",
 	"main": "dist/index.js",
 	"author": "Jose Albizures <jose@albizures.com>",
 	"license": "MIT",

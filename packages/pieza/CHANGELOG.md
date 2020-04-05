@@ -3,6 +3,14 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [0.1.7-alpha.1](https://github.com/albizures/pieza/compare/pieza@0.1.7-alpha.0...pieza@0.1.7-alpha.1) (2020-04-05)
+
+**Note:** Version bump only for package pieza
+
+
+
+
+
 ## [0.1.7-alpha.0](https://github.com/albizures/pieza/compare/pieza@0.1.6...pieza@0.1.7-alpha.0) (2020-04-05)
 
 **Note:** Version bump only for package pieza
