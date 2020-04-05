@@ -37,27 +37,31 @@ const updateBoundaries = (max: number) => {
 	});
 };
 
-win.on('focus', () => updateBoundaries(500));
-win.on('blur', () => updateBoundaries(300));
-
-const setupRecording = async () => {
-	const canvas = document.querySelector('canvas') as HTMLCanvasElement;
-
-	if (!canvas) {
-		await wait(100);
-		setupRecording();
-		return;
-	}
-
-	const recorder = createRecorder(canvas);
-
-	win.on('closed', () => {
-		recorder.save();
-	});
-
-	recorder.start();
-};
-
 if (process.env.PIEZA_RECORDING) {
-	setupRecording();
+	let recorder: ReturnType<typeof createRecorder> | null;
+
+	window.addEventListener('keyup', (event: KeyboardEvent) => {
+		if (event.key !== ' ') {
+			return;
+		}
+
+		if (recorder) {
+			recorder.save();
+			recorder = null;
+			return;
+		}
+
+		const canvas = document.querySelector('canvas') as HTMLCanvasElement;
+		recorder = createRecorder(canvas);
+		recorder.start();
+
+		win.on('closed', () => {
+			if (recorder) {
+				recorder.abort();
+			}
+		});
+	});
+} else {
+	win.on('focus', () => updateBoundaries(500));
+	win.on('blur', () => updateBoundaries(300));
 }

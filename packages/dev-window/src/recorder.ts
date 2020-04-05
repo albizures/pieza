@@ -54,19 +54,24 @@ const createRecorder = (canvas: HTMLCanvasElement) => {
 	];
 
 	const ffmpeg = execa(ffmpegPath, args);
-	let stopped = true;
+	let stopped = false;
 
 	const start = async () => {
 		const image = await getImage(canvas);
-		addFrame(ffmpeg, image);
+		await addFrame(ffmpeg, image);
 
-		if (stopped) {
+		if (!stopped) {
 			setTimeout(start, 0);
 		}
 	};
 
 	const save = () => {
+		if (ffmpeg.killed) {
+			return;
+		}
+
 		stopped = true;
+
 		setTimeout(() => {
 			if (ffmpeg.stdin) {
 				ffmpeg.stdin.end();
