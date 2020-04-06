@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [0.3.1-alpha.1](https://github.com/albizures/pieza/compare/@pieza/core@0.3.1-alpha.0...@pieza/core@0.3.1-alpha.1) (2020-04-06)
+
+
+### Features
+
+* **core:** add context to the sketch object ([6bc7f57](https://github.com/albizures/pieza/commit/6bc7f57e1ee7a16d6cdedecd9a2e8af8989c5232))
+
+
+
+
+
 ## [0.3.1-alpha.0](https://github.com/albizures/pieza/compare/@pieza/core@0.3.0...@pieza/core@0.3.1-alpha.0) (2020-04-05)
 
 

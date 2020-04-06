@@ -1,6 +1,6 @@
 {
 	"name": "pieza-examples",
-	"version": "1.2.7-alpha.1",
+	"version": "1.2.7-alpha.2",
 	"private": true,
 	"main": "index.js",
 	"author": "Jose Albizures <jose@albizures.com>",
@@ -12,9 +12,9 @@
 		"preinstall": "yarn clean"
 	},
 	"dependencies": {
-		"pieza": "^0.1.7-alpha.1"
+		"pieza": "^0.1.7-alpha.2"
 	},
 	"devDependencies": {
-		"@pieza/dev-window": "^0.0.2-alpha.1"
+		"@pieza/dev-window": "^0.0.2-alpha.2"
 	}
 }

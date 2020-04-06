@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [0.0.2-alpha.2](https://github.com/albizures/pieza/compare/@pieza/dev-window@0.0.2-alpha.1...@pieza/dev-window@0.0.2-alpha.2) (2020-04-06)
+
+
+### Features
+
+* **window:** use a child_process to render the video ([a2dd7f5](https://github.com/albizures/pieza/commit/a2dd7f55097feab06cc587eec61cd1b6799a3526))
+
+
+
+
+
 ## [0.0.2-alpha.1](https://github.com/albizures/pieza/compare/@pieza/dev-window@0.0.2-alpha.0...@pieza/dev-window@0.0.2-alpha.1) (2020-04-05)
 
 
