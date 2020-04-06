@@ -24,6 +24,7 @@ export interface Pieza {
 	name: string;
 	width: number;
 	height: number;
+	context: Context;
 	resize: () => void;
 	attach: (parent: HTMLElement) => Promise<void>;
 	updateSetting: (settingName: string, value: any) => void;
@@ -148,6 +149,12 @@ const create = <T extends object = {}, S = void>(
 	if (!isClient) {
 		return {
 			...size,
+			get context() {
+				return context;
+			},
+			set context(value) {
+				context = value;
+			},
 			resize() {},
 			attach: async () => console.warn('not available in the server'),
 			updateSetting: async () => console.warn('not available in the server'),
@@ -213,6 +220,12 @@ const create = <T extends object = {}, S = void>(
 	const pieza = {
 		...size,
 		name,
+		get context() {
+			return context;
+		},
+		set context(value) {
+			context = value;
+		},
 		resize() {
 			singleRun(() => {
 				scaleSketch();
