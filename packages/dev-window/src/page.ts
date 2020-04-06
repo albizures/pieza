@@ -1,7 +1,7 @@
 import { remote } from 'electron';
 import debouce from 'lodash.debounce';
 import { createRecorder } from './recorder';
-import { wait, getSize } from './utils';
+import { getSize } from './utils';
 
 const sketchName = process.env.PIEZA_SKETCH;
 const win = remote.getCurrentWindow();
@@ -12,15 +12,19 @@ window.addEventListener('keyup', (event: KeyboardEvent) => {
 	}
 });
 
+const getSketch = () => {
+	const piezas = (window as any).piezas;
+	if (sketchName && piezas.has(sketchName)) {
+		return piezas.get(sketchName);
+	}
+};
+
 win.on(
 	'resize',
 	debouce(() => {
-		const piezas = (window as any).piezas;
-		if (sketchName && piezas.has(sketchName)) {
-			const sketch = piezas.get(sketchName);
-			if (sketch) {
-				sketch.resize();
-			}
+		const sketch = getSketch();
+		if (sketch) {
+			sketch.resize();
 		}
 	}, 100),
 );
@@ -45,7 +49,9 @@ if (process.env.PIEZA_RECORDING) {
 			return;
 		}
 
+		const sketch = getSketch();
 		if (recorder) {
+			sketch.context.noLoop();
 			recorder.save();
 			recorder = null;
 			return;
@@ -53,7 +59,16 @@ if (process.env.PIEZA_RECORDING) {
 
 		const canvas = document.querySelector('canvas') as HTMLCanvasElement;
 		recorder = createRecorder(canvas);
+
+		const originalDraw = sketch.context.draw;
+
 		recorder.start();
+		sketch.context.draw = () => {
+			originalDraw();
+			if (recorder) {
+				recorder.addFrame();
+			}
+		};
 
 		win.on('closed', () => {
 			if (recorder) {

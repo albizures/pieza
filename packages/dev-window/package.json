@@ -16,6 +16,7 @@
 		"start": "electron ./dist/index.js"
 	},
 	"dependencies": {
+		"data-uri-to-buffer": "^3.0.0",
 		"electron": "^8.2.0",
 		"electron-debug": "^3.0.1",
 		"execa": "^4.0.0",
