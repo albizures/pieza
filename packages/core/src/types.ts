@@ -14,6 +14,7 @@ declare global {
 export type Setup<S> = () => S;
 export type SettingsFactory<T> = (context: p5) => T;
 export type Draw = () => void;
+export type Preload = () => void;
 export type Update<S> = (state: S) => Partial<S>;
 
 export enum P5EventsNames {
@@ -63,6 +64,7 @@ export interface PiezaData<S = unknown, T = unknown> extends P5EventHandlers {
 	measures: ContextMeasures;
 	name: string;
 	draw?: Draw;
+	preload?: Preload;
 	type?: p5.WEBGL | p5.P2D;
 	setup: Setup<S>;
 	update?: Update<S>;
@@ -123,6 +125,7 @@ export interface PiezaConfig<T extends object, S> extends P5EventHandlers {
 	size?: PiezaSize;
 	setup: Setup<S>;
 	draw?: Draw;
+	preload?: Preload;
 	update?: Update<S>;
 	state?: S;
 	settingsPanel?: boolean;

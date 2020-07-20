@@ -12,7 +12,6 @@ import {
 	defaultSetup,
 	runSetup,
 	parseSize,
-	resizeSketch,
 	scaleSketch,
 } from './utils';
 import { setLocalSetting } from './localSettings';
@@ -23,7 +22,6 @@ import {
 	cleanCurrentData,
 } from './utils/hooks';
 import { wrapEventHandlers, setEventHandlers } from './events';
-import { useContext } from './hooks';
 
 export interface Pieza {
 	name: string;
@@ -149,6 +147,7 @@ const create = <T extends object = {}, S = void>(
 		name,
 		settings,
 		draw,
+		preload,
 		update,
 		settingsPanel = !__ELECTRON__,
 		state: defaultState = {} as S,
@@ -182,6 +181,7 @@ const create = <T extends object = {}, S = void>(
 		type,
 		name,
 		draw,
+		preload,
 		setup,
 		update,
 		settingsDescription: {},
@@ -211,6 +211,16 @@ const create = <T extends object = {}, S = void>(
 
 	const setupPieza = (context: Context) => {
 		data.context = context;
+
+		if (data.preload) {
+			context.preload = () => {
+				setCurrentData(data);
+				if (data.preload) {
+					data.preload();
+				}
+				cleanCurrentData();
+			};
+		}
 
 		setEventHandlers(config, context);
 
