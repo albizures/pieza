@@ -16,7 +16,12 @@ import {
 	scaleSketch,
 } from './utils';
 import { setLocalSetting } from './localSettings';
-import { run, singleRun } from './utils/hooks';
+import {
+	run,
+	singleRun,
+	setCurrentData,
+	cleanCurrentData,
+} from './utils/hooks';
 import { wrapEventHandlers, setEventHandlers } from './events';
 import { useContext } from './hooks';
 
@@ -100,7 +105,16 @@ const addDraw = <S>(data: PiezaData<S>, context: Context) => {
 	};
 
 	context.draw = () => {
-		run([updateState, autoClean ? clear : null, draw], data);
+		setCurrentData(data);
+
+		updateState();
+		if (autoClean) {
+			clear();
+		}
+
+		draw();
+
+		cleanCurrentData();
 	};
 };
 
