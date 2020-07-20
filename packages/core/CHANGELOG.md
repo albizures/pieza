@@ -3,6 +3,18 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [0.4.0-alpha.0](https://github.com/albizures/pieza/compare/@pieza/core@0.3.1-alpha.1...@pieza/core@0.4.0-alpha.0) (2020-07-20)
+
+
+### Features
+
+* **draw:** improve draw performace ([986949f](https://github.com/albizures/pieza/commit/986949fdd3ee865736ae92cff9694ff61d6edfa0))
+* **p5:** support preload function ([78de148](https://github.com/albizures/pieza/commit/78de1488ffb80a869c021853d1173dff4c078f08))
+
+
+
+
+
 ## [0.3.1-alpha.1](https://github.com/albizures/pieza/compare/@pieza/core@0.3.1-alpha.0...@pieza/core@0.3.1-alpha.1) (2020-04-06)
 
 

@@ -3,6 +3,18 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [1.3.0-alpha.0](https://github.com/albizures/pieza/compare/pieza-examples@1.2.7-alpha.2...pieza-examples@1.3.0-alpha.0) (2020-07-20)
+
+
+### Features
+
+* **assets:** support assets folder ([942e605](https://github.com/albizures/pieza/commit/942e605264bab5d58bdd82e73080f819d2078d32))
+* **p5:** support preload function ([78de148](https://github.com/albizures/pieza/commit/78de1488ffb80a869c021853d1173dff4c078f08))
+
+
+
+
+
 ## [1.2.7-alpha.2](https://github.com/albizures/pieza/compare/pieza-examples@1.2.7-alpha.1...pieza-examples@1.2.7-alpha.2) (2020-04-06)
 
 **Note:** Version bump only for package pieza-examples
