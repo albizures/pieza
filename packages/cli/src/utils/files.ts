@@ -9,6 +9,10 @@ const getMainFolder = () => {
 	return path.join(projectPath, 'src/sketches');
 };
 
+const getAssetsFolder = () => {
+	return path.join(projectPath, 'assets');
+};
+
 const getSketchesData = async (
 	entry: Record<string, string>,
 	sketches: Pieza[],
@@ -62,4 +66,4 @@ const clean = (buildPath: string) => {
 	rimraf.sync(buildPath);
 };
 
-export { getMainFolder, parseFiles, getSketchesData, clean };
+export { getMainFolder, parseFiles, getSketchesData, clean, getAssetsFolder };

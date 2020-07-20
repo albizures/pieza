@@ -105,7 +105,7 @@ export default class Start extends Command {
 		const port = await getPort({ port: defaultPort });
 		const host = flags.host || 'localhost';
 
-		server.listen(port, host, (error: Error) => {
+		server.listen(port, host, (error?: Error) => {
 			if (error) {
 				throw error;
 			}

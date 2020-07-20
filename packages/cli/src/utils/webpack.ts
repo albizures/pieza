@@ -7,6 +7,7 @@ import createLogger from 'webpack-dev-server/lib/utils/createLogger';
 import Server, { Configuration as ServerConfig } from 'webpack-dev-server';
 import { defaultWebpackConfig } from '../config';
 import { Pieza, OptionConfig, EnvType, SketchData } from '../types';
+import { getAssetsFolder } from './files';
 
 const createDevServer = (
 	compiler: Compiler,
@@ -16,9 +17,10 @@ const createDevServer = (
 	const log = createLogger({
 		...(verbose ? {} : { logLevel: 'silent' }),
 	});
+
 	const config: ServerConfig = {
 		compress: false,
-
+		contentBase: [getAssetsFolder()],
 		historyApiFallback: {
 			rewrites: rewrites,
 		},
